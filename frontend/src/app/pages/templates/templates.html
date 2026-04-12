@@ -1,0 +1,16 @@
+<h1>{{ t('templates.title') }}</h1>
+<p>{{ t('templates.hint') }}</p>
+
+<div class="grid">
+  @for (tmpl of items; track tmpl.id) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ t(tmpl.titleKey) }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <pre>{{ tmpl.body }}</pre>
+        <button mat-flat-button color="primary" type="button" (click)="apply(tmpl)">{{ t('templates.use') }}</button>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

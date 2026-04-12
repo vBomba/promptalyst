@@ -1,0 +1,39 @@
+.row {
+  margin-bottom: 0.75rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--eco-text);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--eco-accent);
+  }
+}
+
+.date {
+  font-size: 0.85rem;
+  color: var(--eco-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vers {
+  font-size: 0.86rem;
+  color: var(--eco-text-muted);
+  margin-right: auto;
+}

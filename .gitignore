@@ -1,0 +1,15 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/*
+!frontend/.vscode/extensions.json
+!frontend/.vscode/launch.json
+!frontend/.vscode/tasks.json

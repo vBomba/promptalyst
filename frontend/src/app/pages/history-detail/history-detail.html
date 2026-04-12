@@ -1,0 +1,52 @@
+<a routerLink="/history">← {{ t('nav.history') }}</a>
+
+@if (session(); as s) {
+  <h1>{{ s.title }}</h1>
+
+  <h2>{{ t('history.versions') }}</h2>
+  <ul class="version-list">
+    @for (v of s.versions; track v.id) {
+      <li>
+        <span class="ord">#{{ v.ordinal + 1 }}</span>
+        <pre class="snippet">{{ v.text | slice: 0 : 220 }}{{ v.text.length > 220 ? '…' : '' }}</pre>
+      </li>
+    }
+  </ul>
+
+  @if (s.versions.length > 1) {
+    <h2>{{ t('history.compare') }}</h2>
+    <div class="compare-picks">
+      <label>
+        A
+        <select class="filter-select" [ngModel]="compareA()" (ngModelChange)="compareA.set(+($event))">
+          @for (v of s.versions; track v.id; let i = $index) {
+            <option [value]="i">{{ versionLabel(v) }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        B
+        <select class="filter-select" [ngModel]="compareB()" (ngModelChange)="compareB.set(+($event))">
+          @for (v of s.versions; track v.id; let i = $index) {
+            <option [value]="i">{{ versionLabel(v) }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    @if (diffLines(); as d) {
+      <div class="diff-grid">
+        <mat-card>
+          <mat-card-header><mat-card-title>A ({{ d.leftIdx + 1 }})</mat-card-title></mat-card-header>
+          <mat-card-content><pre>{{ d.left }}</pre></mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-header><mat-card-title>B ({{ d.rightIdx + 1 }})</mat-card-title></mat-card-header>
+          <mat-card-content><pre>{{ d.right }}</pre></mat-card-content>
+        </mat-card>
+      </div>
+    }
+  }
+} @else {
+  <p>{{ t('history.empty') }}</p>
+}
