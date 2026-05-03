@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipListbox, MatChipOption } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,6 +15,10 @@ import { LocaleService } from '../../core/locale.service';
 import { PromptDraftService } from '../../core/prompt-draft.service';
 import { PromptPipelineService } from '../../core/prompt-pipeline.service';
 import { PromptPipelineState } from '../../core/prompt.types';
+import { TemplateStoreService } from '../../core/template-store.service';
+
+const TEMPLATE_CHIP_NONE = '__none__' as const;
+type TemplateChipValue = string | typeof TEMPLATE_CHIP_NONE;
 
 @Component({
   selector: 'app-analyzer',
@@ -21,6 +26,8 @@ import { PromptPipelineState } from '../../core/prompt.types';
     FormsModule,
     MatButtonModule,
     MatCardModule,
+    MatChipListbox,
+    MatChipOption,
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
@@ -33,7 +40,11 @@ export class Analyzer implements OnInit {
   private readonly pipeline = inject(PromptPipelineService);
   private readonly history = inject(HistoryStorageService);
   private readonly draft = inject(PromptDraftService);
-  private readonly locale = inject(LocaleService);
+  protected readonly locale = inject(LocaleService);
+  protected readonly templateStore = inject(TemplateStoreService);
+
+  protected readonly chipNone = TEMPLATE_CHIP_NONE;
+  protected readonly chipSelection = signal<TemplateChipValue>(TEMPLATE_CHIP_NONE);
 
   protected readonly promptText = signal('');
   protected readonly advanced = signal(false);
@@ -42,15 +53,33 @@ export class Analyzer implements OnInit {
   protected readonly state = signal<PromptPipelineState | null>(null);
   protected readonly currentSessionId = signal<string | null>(null);
 
+  constructor() {
+    effect(() => {
+      const lang = this.locale.uiLang();
+      const sel = this.chipSelection();
+      if (sel !== TEMPLATE_CHIP_NONE) {
+        const body = this.templateStore.getBody(sel, lang);
+        this.promptText.set(body);
+      }
+    });
+  }
+
   ngOnInit(): void {
-    const d = this.draft.takeText();
-    if (d) {
-      this.promptText.set(d);
+    const pendingId = this.draft.takePendingTemplateId();
+    const text = this.draft.takeText();
+    if (pendingId) {
+      this.chipSelection.set(pendingId);
+    } else if (text) {
+      this.promptText.set(text);
     }
   }
 
   protected t(key: string): string {
     return t(key, this.locale.uiLang());
+  }
+
+  protected onChipListChange(value: TemplateChipValue): void {
+    this.chipSelection.set(value ?? TEMPLATE_CHIP_NONE);
   }
 
   protected analyze(): void {
@@ -112,6 +141,7 @@ export class Analyzer implements OnInit {
 
   protected newPrompt(): void {
     this.promptText.set('');
+    this.chipSelection.set(TEMPLATE_CHIP_NONE);
     this.state.set(null);
     this.error.set(null);
     this.currentSessionId.set(null);

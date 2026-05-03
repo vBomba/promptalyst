@@ -1,3 +1,10 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 .topbar {
   position: sticky;
   top: 0;
@@ -6,6 +13,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem 0.75rem;
+  flex-shrink: 0;
   min-height: 56px;
   padding: 0.35rem 0.85rem;
   background: color-mix(in srgb, var(--eco-surface) 94%, var(--eco-white) 6%);
@@ -149,7 +157,10 @@
 }
 
 .page-shell {
+  flex: 1 1 auto;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
   padding: 1rem 1.1rem 2rem;
+  min-height: 0;
 }

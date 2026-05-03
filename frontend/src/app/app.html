@@ -8,14 +8,8 @@
     <a routerLink="/history" routerLinkActive="active">{{ t('nav.history') }}</a>
     <a routerLink="/templates" routerLinkActive="active">{{ t('nav.templates') }}</a>
   </nav>
-  <label class="sr-only" for="ui-lang">{{ t('settings.uiLang') }}</label>
-  <select id="ui-lang" class="filter-select lang-select" [value]="uiLang()" (change)="setUiLang($any($event.target).value)">
-    <option value="en">English</option>
-    <option value="uk">Українська</option>
-    <option value="pl">Polski</option>
-  </select>
-  <label class="sr-only" for="ai-lang">{{ t('settings.aiLang') }}</label>
-  <select id="ai-lang" class="filter-select lang-select" [value]="aiLang()" (change)="setAiLang($any($event.target).value)">
+  <label class="sr-only" for="app-lang">{{ t('settings.language') }}</label>
+  <select id="app-lang" class="filter-select lang-select" [value]="appLang()" (change)="setAppLang($any($event.target).value)">
     <option value="en">English</option>
     <option value="uk">Українська</option>
     <option value="pl">Polski</option>

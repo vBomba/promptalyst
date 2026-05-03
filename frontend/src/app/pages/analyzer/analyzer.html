@@ -2,9 +2,15 @@
 <p>{{ t('analyzer.placeholder') }}</p>
 
 <div class="toolbar">
-  <mat-slide-toggle [checked]="advanced()" (change)="advanced.set($event.checked)">
-    {{ advanced() ? t('analyzer.modeAdvanced') : t('analyzer.modeSimple') }}
-  </mat-slide-toggle>
+  <div class="mode-toggle-host">
+    <mat-slide-toggle
+      class="toolbar-slide"
+      [checked]="advanced()"
+      (change)="advanced.set($event.checked)"
+    >
+      {{ advanced() ? t('analyzer.modeAdvanced') : t('analyzer.modeSimple') }}
+    </mat-slide-toggle>
+  </div>
   <span class="spacer"></span>
   <button mat-stroked-button type="button" (click)="newPrompt()">{{ t('analyzer.newPrompt') }}</button>
   <button mat-flat-button color="primary" type="button" [disabled]="busy() || !promptText().trim()" (click)="analyze()">
@@ -29,10 +35,25 @@
   <p class="error">{{ t('analyzer.error') }}: {{ error() }}</p>
 }
 
-<mat-form-field appearance="outline" class="prompt-field">
+<mat-form-field appearance="outline" class="prompt-field eco-field" subscriptSizing="dynamic">
   <mat-label>{{ t('analyzer.title') }}</mat-label>
   <textarea matInput rows="12" [ngModel]="promptText()" (ngModelChange)="promptText.set($event)"></textarea>
 </mat-form-field>
+
+<div class="template-chips-wrap">
+  <span class="chips-label" id="tpl-chips-label">{{ t('analyzer.pickTemplate') }}</span>
+  <mat-chip-listbox
+    class="template-chips"
+    [ngModel]="chipSelection()"
+    (ngModelChange)="onChipListChange($event)"
+    aria-labelledby="tpl-chips-label"
+  >
+    <mat-chip-option [value]="chipNone">{{ t('analyzer.templateCustom') }}</mat-chip-option>
+    @for (tmpl of templateStore.list(); track tmpl.id) {
+      <mat-chip-option [value]="tmpl.id">{{ templateStore.getTitle(tmpl.id, locale.uiLang()) }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+</div>
 
 @if (state(); as st) {
   @if (st.analysis; as a) {

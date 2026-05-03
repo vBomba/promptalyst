@@ -4,6 +4,21 @@
   align-items: center;
   gap: 0.5rem 0.75rem;
   margin-bottom: 1rem;
+  overflow: visible;
+}
+
+.mode-toggle-host {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+
+  mat-slide-toggle {
+    flex-shrink: 0;
+    overflow: visible;
+    max-height: none;
+  }
 }
 
 .spacer {
@@ -12,7 +27,25 @@
 
 .prompt-field {
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.template-chips-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.chips-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--eco-text-muted);
+}
+
+.template-chips {
+  width: 100%;
 }
 
 .loading {

@@ -80,6 +80,9 @@ $dark-theme: mat.define-theme(
   --eco-card-shadow-hover:
     0 8px 14px rgba(var(--eco-shadow-soft-rgb), 0.12),
     0 4px 8px rgba(var(--eco-shadow-soft-rgb), 0.08);
+  --eco-scrollbar-track: var(--eco-bg);
+  --eco-scrollbar-thumb: color-mix(in srgb, var(--eco-accent) 48%, var(--eco-border));
+  --eco-scrollbar-thumb-hover: color-mix(in srgb, var(--eco-accent-strong) 62%, var(--eco-border));
 }
 
 body.app-light-theme {
@@ -99,6 +102,9 @@ body.app-light-theme {
   --eco-shadow-lg:
     0 8px 16px rgba(var(--eco-success-500-rgb), 0.24),
     0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
+  --eco-scrollbar-track: var(--eco-bg);
+  --eco-scrollbar-thumb: color-mix(in srgb, var(--eco-neutral-300) 78%, var(--eco-success-600) 22%);
+  --eco-scrollbar-thumb-hover: color-mix(in srgb, var(--eco-neutral-300) 62%, var(--eco-success-600) 38%);
 }
 
 body.app-dark-theme {
@@ -118,6 +124,10 @@ body.app-dark-theme {
   --eco-shadow-lg:
     0 8px 16px rgba(var(--eco-purple-500-rgb), 0.26),
     0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
+  /* Flat, low-contrast scrollbar — no loud purple gradient */
+  --eco-scrollbar-track: var(--eco-bg);
+  --eco-scrollbar-thumb: #34303f;
+  --eco-scrollbar-thumb-hover: #4a4560;
 }
 
 * {
@@ -166,28 +176,37 @@ p {
   color: var(--eco-text-muted);
 }
 
-* {
+/* Page scrollbar only — nested controls keep browser defaults */
+html {
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--eco-accent) 45%, var(--eco-border)) transparent;
+  scrollbar-color: var(--eco-scrollbar-thumb) var(--eco-scrollbar-track);
 }
 
-*::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+html::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--eco-accent) 42%, var(--eco-border));
+html::-webkit-scrollbar-track {
+  background: var(--eco-scrollbar-track);
   border-radius: 999px;
-  border: 2px solid var(--eco-bg);
 }
 
-*::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--eco-accent-strong) 68%, var(--eco-border));
+html::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  background-color: var(--eco-scrollbar-thumb);
+  min-height: 36px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--eco-scrollbar-thumb-hover);
+}
+
+html::-webkit-scrollbar-corner {
+  background: var(--eco-scrollbar-track);
 }
 
 button,
@@ -249,6 +268,18 @@ button,
 .mat-mdc-outlined-button.mat-warn:hover {
   border-color: var(--eco-accent) !important;
   color: var(--eco-text) !important;
+}
+
+.mat-mdc-outlined-button.btn-template-delete {
+  color: color-mix(in srgb, var(--eco-text-muted) 50%, var(--eco-danger) 50%) !important;
+  border-color: var(--eco-border) !important;
+  background: var(--eco-surface) !important;
+}
+
+.mat-mdc-outlined-button.btn-template-delete:hover {
+  color: color-mix(in srgb, var(--eco-danger) 72%, var(--eco-text)) !important;
+  border-color: color-mix(in srgb, var(--eco-danger) 28%, var(--eco-border)) !important;
+  background: color-mix(in srgb, var(--eco-danger) 9%, var(--eco-surface)) !important;
 }
 
 .mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before,
@@ -326,23 +357,42 @@ select:focus,
 .mat-mdc-form-field .mdc-notched-outline__notch,
 .mat-mdc-form-field .mdc-notched-outline__trailing {
   border-color: var(--eco-border) !important;
+  border-width: 1px !important;
 }
 
 .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
 .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
 .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
   border-color: var(--eco-accent) !important;
+  border-width: 1px !important;
 }
 
-.mat-mdc-form-field.mat-focused .mdc-text-field {
-  box-shadow: 0 0 0 3px var(--eco-ring);
+/* One outline only — extra box-shadow looked like a second border */
+.mat-mdc-form-field.mat-focused .mdc-text-field--outlined {
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field .mdc-text-field--outlined .mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.mat-mdc-input-element {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .mat-mdc-form-field .mat-mdc-text-field-wrapper {
   transition:
     border-color 200ms ease,
-    box-shadow 200ms ease,
     background-color 200ms ease;
+}
+
+.mat-mdc-form-field.eco-field .mdc-text-field--outlined {
+  background-color: var(--eco-surface);
+}
+
+.mat-mdc-form-field.eco-field .mat-mdc-form-field-infix {
+  min-height: 2.5rem;
 }
 
 .mat-mdc-card-header {
@@ -368,4 +418,94 @@ select:focus,
 
 .mat-mdc-card:hover {
   box-shadow: var(--eco-card-shadow-hover) !important;
+}
+
+/* mat-slide-toggle — never show nested scrollbars (WebKit/Firefox) */
+.mat-mdc-slide-toggle,
+.mat-mdc-slide-toggle * {
+  scrollbar-width: none;
+}
+
+.mat-mdc-slide-toggle *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* mat-slide-toggle — eco palette (track/handle/state layer) */
+.mat-mdc-slide-toggle {
+  overflow: visible !important;
+
+  .mdc-form-field,
+  .mdc-switch {
+    overflow: visible !important;
+  }
+
+  --mat-slide-toggle-label-text-color: var(--eco-text);
+
+  --mat-slide-toggle-selected-track-color: color-mix(in srgb, var(--eco-accent) 38%, var(--eco-border));
+  --mat-slide-toggle-selected-focus-track-color: color-mix(in srgb, var(--eco-accent) 48%, var(--eco-border));
+  --mat-slide-toggle-selected-hover-track-color: color-mix(in srgb, var(--eco-accent) 44%, var(--eco-border));
+  --mat-slide-toggle-selected-pressed-track-color: color-mix(in srgb, var(--eco-accent-strong) 55%, var(--eco-border));
+
+  --mat-slide-toggle-selected-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-focus-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-hover-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-icon-color: var(--eco-accent-strong);
+
+  --mat-slide-toggle-selected-focus-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-selected-hover-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-selected-pressed-state-layer-color: var(--eco-accent-strong);
+
+  --mat-slide-toggle-unselected-track-color: color-mix(in srgb, var(--eco-surface-muted) 88%, var(--eco-border));
+  --mat-slide-toggle-unselected-focus-track-color: color-mix(in srgb, var(--eco-surface-muted) 82%, var(--eco-border));
+  --mat-slide-toggle-unselected-hover-track-color: color-mix(in srgb, var(--eco-accent) 12%, var(--eco-surface-muted));
+  --mat-slide-toggle-unselected-pressed-track-color: color-mix(in srgb, var(--eco-accent) 18%, var(--eco-surface-muted));
+
+  --mat-slide-toggle-unselected-handle-color: var(--eco-text-muted);
+  --mat-slide-toggle-unselected-focus-handle-color: var(--eco-text);
+  --mat-slide-toggle-unselected-hover-handle-color: var(--eco-text);
+  --mat-slide-toggle-unselected-pressed-handle-color: var(--eco-text-muted);
+  --mat-slide-toggle-unselected-icon-color: var(--eco-text-muted);
+
+  --mat-slide-toggle-unselected-focus-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-unselected-hover-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-unselected-pressed-state-layer-color: var(--eco-accent-strong);
+}
+
+/* Toolbar slide-toggle: no extra touch target scroll / overflow */
+.mat-mdc-slide-toggle.toolbar-slide {
+  --mat-slide-toggle-touch-target-display: none;
+  flex-shrink: 0;
+  align-self: center;
+  max-height: none !important;
+  overflow: visible !important;
+  line-height: 1.25;
+
+  .mat-mdc-slide-toggle-touch-target {
+    display: none !important;
+  }
+
+  .mat-internal-form-field,
+  .mdc-form-field {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .mdc-label {
+    overflow: visible !important;
+    white-space: normal;
+    max-height: none !important;
+  }
+}
+
+/* Chip listbox (template picker) — eco surfaces */
+.template-chips.mat-mdc-chip-listbox {
+  --mat-chip-elevated-container-color: color-mix(in srgb, var(--eco-surface) 82%, var(--eco-border));
+  --mat-chip-elevated-selected-container-color: color-mix(in srgb, var(--eco-accent) 22%, var(--eco-surface));
+  --mat-chip-label-text-color: var(--eco-text);
+  --mat-chip-with-icon-icon-color: var(--eco-accent-strong);
+  --mat-chip-selected-label-text-color: var(--eco-accent-strong);
+  gap: 0.4rem;
+  flex-wrap: wrap;
 }
