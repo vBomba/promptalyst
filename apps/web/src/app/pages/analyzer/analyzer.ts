@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import {
   VbButtonComponent,
@@ -39,7 +39,7 @@ export class Analyzer implements OnInit {
   private readonly history = inject(HistoryStorageService);
   private readonly draft = inject(PromptDraftService);
   protected readonly locale = inject(LocaleService);
-  protected readonly templateStore = inject(TemplateStoreService);
+  private readonly templateStore = inject(TemplateStoreService);
 
   protected readonly chipNone = TEMPLATE_CHIP_NONE;
   protected readonly chipSelection = signal<TemplateChipValue>(TEMPLATE_CHIP_NONE);
@@ -50,6 +50,15 @@ export class Analyzer implements OnInit {
   protected readonly error = signal<string | null>(null);
   protected readonly state = signal<PromptPipelineState | null>(null);
   protected readonly currentSessionId = signal<string | null>(null);
+
+  /** Precomputed chip labels — avoids calling store methods from the template. */
+  protected readonly templateChipRows = computed(() => {
+    const lang = this.locale.uiLang();
+    return this.templateStore.list().map((tmpl) => ({
+      id: tmpl.id,
+      label: this.templateStore.getTitle(tmpl.id, lang),
+    }));
+  });
 
   constructor() {
     effect(() => {

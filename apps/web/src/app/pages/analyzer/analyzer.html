@@ -78,16 +78,16 @@
       (click)="onChipListChange(chipNone)"
       (keydown)="onTemplateChipKeydown($event, chipNone)"
     />
-    @for (tmpl of templateStore.list(); track tmpl.id) {
+    @for (row of templateChipRows(); track row.id) {
       <vb-chip
         class="template-chip"
-        [class.selected]="chipSelection() === tmpl.id"
-        [label]="templateStore.getTitle(tmpl.id, locale.uiLang())"
+        [class.selected]="chipSelection() === row.id"
+        [label]="row.label"
         role="radio"
-        [attr.aria-checked]="chipSelection() === tmpl.id"
-        [attr.tabindex]="chipSelection() === tmpl.id ? 0 : -1"
-        (click)="onChipListChange(tmpl.id)"
-        (keydown)="onTemplateChipKeydown($event, tmpl.id)"
+        [attr.aria-checked]="chipSelection() === row.id"
+        [attr.tabindex]="chipSelection() === row.id ? 0 : -1"
+        (click)="onChipListChange(row.id)"
+        (keydown)="onTemplateChipKeydown($event, row.id)"
       />
     }
   </div>
