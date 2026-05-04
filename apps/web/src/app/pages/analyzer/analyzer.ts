@@ -10,16 +10,25 @@ import {
 import { finalize, map, switchMap } from 'rxjs';
 
 import { HistoryStorageService, PromptSessionStored, PromptVersionStored } from '../../core/history-storage.service';
+import { t } from '../../core/i18n';
 import { LocPipe } from '../../core/loc.pipe';
 import { LocaleService } from '../../core/locale.service';
 import { PromptDraftService } from '../../core/prompt-draft.service';
 import { PromptPipelineService } from '../../core/prompt-pipeline.service';
-import { PromptPipelineState } from '../../core/prompt.types';
+import { type AnalysisCriteria, PromptPipelineState } from '../../core/prompt.types';
 import { TelemetryService } from '../../core/telemetry.service';
 import { TemplateStoreService } from '../../core/template-store.service';
 
 const TEMPLATE_CHIP_NONE = '__none__' as const;
 type TemplateChipValue = string | typeof TEMPLATE_CHIP_NONE;
+
+const CRITERIA_ORDER: readonly (keyof AnalysisCriteria)[] = [
+  'clarity',
+  'context',
+  'specificity',
+  'constraints',
+  'outputFormat',
+];
 
 @Component({
   selector: 'app-analyzer',
@@ -62,6 +71,15 @@ export class Analyzer implements OnInit {
     return this.templateStore.list().map((tmpl) => ({
       id: tmpl.id,
       label: this.templateStore.getTitle(tmpl.id, lang),
+    }));
+  });
+
+  /** Localized criterion labels for the analysis breakdown (not method calls in template). */
+  protected readonly criterionRows = computed(() => {
+    const lang = this.locale.uiLang();
+    return CRITERIA_ORDER.map((key) => ({
+      key,
+      label: t(`analyzer.criterion.${key}`, lang),
     }));
   });
 
@@ -231,10 +249,17 @@ export class Analyzer implements OnInit {
     };
     session.versions.push(version);
     session.updatedAt = Date.now();
-    await this.history.putSession(session);
-  }
-
-  protected criteriaKeys(): (keyof NonNullable<PromptPipelineState['analysis']>['criteria'])[] {
-    return ['clarity', 'context', 'specificity', 'constraints', 'outputFormat'];
+    try {
+      await this.history.putSession(session);
+      this.telemetry.emit('history_save_complete', {
+        versionOrdinal: version.ordinal,
+        totalVersions: session.versions.length,
+      });
+    } catch (err) {
+      this.telemetry.emit('history_save_failed', {
+        versionOrdinal: version.ordinal,
+      });
+      this.error.set(String((err as Error)?.message ?? err));
+    }
   }
 }

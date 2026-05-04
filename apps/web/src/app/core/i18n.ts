@@ -77,6 +77,23 @@ const STRINGS: Record<string, Dict> = {
     uk: 'Підставити в редактор',
     pl: 'Wstaw do edytora',
   },
+  'analyzer.criterion.clarity': { en: 'Clarity', uk: 'Зрозумілість', pl: 'Jasność' },
+  'analyzer.criterion.context': { en: 'Context', uk: 'Контекст', pl: 'Kontekst' },
+  'analyzer.criterion.specificity': {
+    en: 'Specificity',
+    uk: 'Конкретність',
+    pl: 'Konkretność',
+  },
+  'analyzer.criterion.constraints': {
+    en: 'Constraints',
+    uk: 'Обмеження',
+    pl: 'Ograniczenia',
+  },
+  'analyzer.criterion.outputFormat': {
+    en: 'Output format',
+    uk: 'Формат виводу',
+    pl: 'Format wyjścia',
+  },
 };
 
 export function t(key: string, lang: AppLang): string {
