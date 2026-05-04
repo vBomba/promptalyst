@@ -1,0 +1,26 @@
+{
+  "name": "api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/src",
+  "projectType": "application",
+  "root": "apps/api",
+  "targets": {
+    "build": {
+      "dependsOn": ["contracts:build"],
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/apps/api/dist"],
+      "options": {
+        "command": "npx nest build",
+        "cwd": "apps/api"
+      }
+    },
+    "serve": {
+      "dependsOn": ["contracts:build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx nest start --watch",
+        "cwd": "apps/api"
+      }
+    }
+  }
+}

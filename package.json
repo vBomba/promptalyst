@@ -1,0 +1,42 @@
+{
+  "name": "promptalyst",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "nx": "nx",
+    "dev": "nx run-many -t serve -p api,web --parallel",
+    "serve:api": "nx serve api",
+    "serve:web": "nx serve web",
+    "build": "nx run-many -t build -p api,web",
+    "build:api": "nx build api",
+    "build:web": "nx build web"
+  },
+  "workspaces": ["apps/*", "libs/*"],
+  "dependencies": {
+    "@nestjs/axios": "^4.0.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/throttler": "^6.4.0",
+    "axios": "^1.7.9",
+    "nestjs-pino": "^4.1.0",
+    "pino-http": "^10.3.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nx/js": "22.7.1",
+    "@nx/node": "22.7.1",
+    "@nx/workspace": "22.7.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "@types/uuid": "^10.0.0",
+    "nx": "22.7.1",
+    "typescript": "~5.9.2"
+  }
+}

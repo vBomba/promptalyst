@@ -1,0 +1,127 @@
+<h1>{{ t('analyzer.title') }}</h1>
+<p>{{ t('analyzer.placeholder') }}</p>
+
+<div class="toolbar">
+  <div class="mode-toggle-host">
+    <vb-checkbox [(checked)]="advanced" [label]="advanced() ? t('analyzer.modeAdvanced') : t('analyzer.modeSimple')" />
+  </div>
+  <span class="spacer"></span>
+  <vb-button variant="outlined" type="button" [label]="t('analyzer.newPrompt')" (click)="newPrompt()" />
+  <vb-button
+    variant="filled"
+    color="primary"
+    type="button"
+    [disabled]="busy() || !promptText().trim()"
+    [label]="t('analyzer.analyze')"
+    (click)="analyze()"
+  />
+  <vb-button
+    variant="filled"
+    color="primary"
+    type="button"
+    [disabled]="busy() || !promptText().trim()"
+    [label]="t('analyzer.improve')"
+    (click)="improve()"
+  />
+  <vb-button
+    variant="outlined"
+    type="button"
+    [disabled]="busy() || !state()?.analysis"
+    [label]="t('analyzer.saveHistory')"
+    (click)="saveToHistory()"
+  />
+</div>
+
+@if (busy()) {
+  <div class="loading">
+    <vb-loader [size]="36" [ariaLabel]="t('analyzer.working')" />
+    <span>{{ t('analyzer.working') }}</span>
+  </div>
+}
+
+@if (error()) {
+  <p class="error">{{ t('analyzer.error') }}: {{ error() }}</p>
+}
+
+<vb-textarea
+  class="prompt-field-vb"
+  [rows]="12"
+  [placeholder]="t('analyzer.title')"
+  [counter]="true"
+  [maxLength]="32000"
+  [(value)]="promptText"
+  [ariaLabel]="t('analyzer.title')"
+/>
+
+<div class="template-chips-wrap">
+  <span class="chips-label" id="tpl-chips-label">{{ t('analyzer.pickTemplate') }}</span>
+  <mat-chip-listbox
+    class="template-chips"
+    [ngModel]="chipSelection()"
+    (ngModelChange)="onChipListChange($event)"
+    aria-labelledby="tpl-chips-label"
+  >
+    <mat-chip-option [value]="chipNone">{{ t('analyzer.templateCustom') }}</mat-chip-option>
+    @for (tmpl of templateStore.list(); track tmpl.id) {
+      <mat-chip-option [value]="tmpl.id">{{ templateStore.getTitle(tmpl.id, locale.uiLang()) }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+</div>
+
+@if (state(); as st) {
+  @if (st.analysis; as a) {
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>{{ t('analyzer.score') }}: {{ a.overallScore }} / 10</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul class="criteria">
+          @for (k of criteriaKeys(); track k) {
+            <li>
+              <span class="crit-name">{{ k }}</span>
+              <span class="crit-val">{{ a.criteria[k] }}</span>
+            </li>
+          }
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (st.suggestions?.length) {
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>{{ t('analyzer.suggestions') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          @for (s of st.suggestions; track $index) {
+            <li>{{ s }}</li>
+          }
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (st.improvedText) {
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>{{ t('analyzer.improved') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <pre class="prompt-block">{{ st.improvedText }}</pre>
+        <vb-button variant="outlined" type="button" [label]="t('analyzer.applyImproved')" (click)="applyImproved()" />
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (st.explainChanges) {
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>{{ t('analyzer.explain') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="explain">{{ st.explainChanges }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+}

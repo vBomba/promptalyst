@@ -1,0 +1,40 @@
+.shell-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* vb-select uses font:inherit — smaller type for toolbar language control */
+:host ::ng-deep vb-select.lang-select-shell {
+  min-width: 9.5rem;
+
+  .vb-select__trigger,
+  .vb-select__native {
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    min-height: 2.25rem;
+    padding-block: 0.35rem;
+  }
+
+  .vb-select__value {
+    font-size: inherit;
+  }
+
+  .vb-select__option {
+    font-size: 0.8125rem;
+    min-height: 1.75rem;
+    padding-block: 0.3rem;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

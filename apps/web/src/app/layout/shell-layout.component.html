@@ -1,0 +1,13 @@
+<vb-app-shell>
+  <div vbShellHeaderActions class="shell-header-actions">
+    <label class="sr-only" for="app-lang">{{ t('settings.language') }}</label>
+    <vb-select
+      id="app-lang"
+      class="lang-select-shell"
+      [options]="langOptions"
+      [value]="locale.uiLang()"
+      (valueChange)="onLangChange($event)"
+      [ariaLabel]="t('settings.language')"
+    />
+  </div>
+</vb-app-shell>

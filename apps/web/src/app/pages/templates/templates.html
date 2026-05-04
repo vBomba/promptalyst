@@ -1,0 +1,53 @@
+<h1>{{ t('templates.title') }}</h1>
+<p>{{ t('templates.hint') }}</p>
+<p class="subhint">{{ t('templates.langHint') }}</p>
+
+<div class="toolbar">
+  <vb-button variant="filled" color="primary" type="button" [label]="t('templates.add')" (click)="addTemplate()" />
+  <vb-button variant="outlined" type="button" [label]="t('templates.reset')" (click)="resetAll()" />
+</div>
+
+<div class="grid">
+  @for (tmpl of store.list(); track tmpl.id) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ t('templates.cardTitle') }} · {{ tmpl.id }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <vb-input
+          class="full-vb"
+          [placeholder]="t('templates.editTitle')"
+          [value]="titleDraft()[tmpl.id]"
+          (valueChange)="onTitleChange(tmpl.id, $event)"
+          [ariaLabel]="t('templates.editTitle')"
+        />
+        <vb-textarea
+          class="full-vb"
+          [rows]="10"
+          [counter]="true"
+          [maxLength]="32000"
+          [placeholder]="t('templates.editBody')"
+          [value]="bodyDraft()[tmpl.id]"
+          (valueChange)="onBodyChange(tmpl.id, $event)"
+          [ariaLabel]="t('templates.editBody')"
+        />
+        <div class="card-actions">
+          <vb-button
+            variant="filled"
+            color="primary"
+            type="button"
+            [label]="t('templates.openAnalyzer')"
+            (click)="openInAnalyzer(tmpl.id)"
+          />
+          <vb-button
+            variant="outlined"
+            color="warn"
+            type="button"
+            [label]="t('templates.delete')"
+            (click)="removeTemplate(tmpl.id)"
+          />
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

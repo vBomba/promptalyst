@@ -1,0 +1,520 @@
+@use '@angular/material' as mat;
+@use 'vbomba-ui/theme/vb-color-tokens';
+@use 'vbomba-ui/theme/vb-material-bridge';
+@import '@fontsource/lexend/400.css';
+@import '@fontsource/lexend/500.css';
+@import '@fontsource/lexend/600.css';
+@import '@fontsource/lexend/700.css';
+
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$green-palette,
+    ),
+    density: (scale: 0),
+    typography: (
+      plain-family: '"Lexend", "Lexend Fallback", sans-serif',
+      brand-family: '"Lexend", "Lexend Fallback", sans-serif',
+    ),
+  )
+);
+
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$green-palette,
+    ),
+    density: (scale: 0),
+    typography: (
+      plain-family: '"Lexend", "Lexend Fallback", sans-serif',
+      brand-family: '"Lexend", "Lexend Fallback", sans-serif',
+    ),
+  )
+);
+
+:root {
+  --eco-white: #ffffff;
+  --eco-white-rgb: 255, 255, 255;
+  --eco-black: #000000;
+  --eco-neutral-100: #f4f4f5;
+  --eco-neutral-200: #f9fafb;
+  --eco-neutral-300: #e4e4e7;
+  --eco-neutral-700: #71717a;
+  --eco-neutral-900: #18181b;
+  --eco-success-600: #0f9d58;
+  --eco-success-700: #0b7d45;
+  --eco-success-500-rgb: 15, 157, 88;
+  --eco-purple-400: #a78bfa;
+  --eco-purple-500: #8b5cf6;
+  --eco-purple-600: #7c3aed;
+  --eco-purple-500-rgb: 139, 92, 246;
+  --eco-purple-400-rgb: 167, 139, 250;
+  --eco-danger: #b3261e;
+  --eco-shadow-rgb: 24, 24, 27;
+  --eco-shadow-soft-rgb: 0, 0, 0;
+
+  --eco-bg: #f4f4f5;
+  --eco-surface: #ffffff;
+  --eco-surface-muted: #f9fafb;
+  --eco-text: #18181b;
+  --eco-text-muted: #71717a;
+  --eco-border: #e4e4e7;
+  --eco-accent: #2e7d32;
+  --eco-accent-strong: #1b5e20;
+  --eco-ring: rgba(var(--eco-success-500-rgb), 0.2);
+  --eco-radius: 10px;
+  --eco-btn-text: #27272a;
+  --eco-btn-bg: var(--eco-accent);
+  --eco-btn-bg-strong: var(--eco-accent-strong);
+
+  --eco-btn-text-inverse: var(--eco-white);
+  --eco-shadow-xs: 0 1px 2px rgba(var(--eco-shadow-rgb), 0.1);
+  --eco-shadow-sm: 0 1px 2px rgba(var(--eco-shadow-rgb), 0.14);
+  --eco-shadow-md: 0 4px 10px rgba(var(--eco-shadow-rgb), 0.08);
+  --eco-shadow-lg:
+    0 8px 16px rgba(var(--eco-success-500-rgb), 0.24),
+    0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
+  --eco-card-shadow:
+    0 1px 3px rgba(var(--eco-shadow-soft-rgb), 0.1),
+    0 1px 2px rgba(var(--eco-shadow-soft-rgb), 0.06);
+  --eco-card-shadow-hover:
+    0 8px 14px rgba(var(--eco-shadow-soft-rgb), 0.12),
+    0 4px 8px rgba(var(--eco-shadow-soft-rgb), 0.08);
+  --eco-scrollbar-track: var(--eco-bg);
+  --eco-scrollbar-thumb: color-mix(in srgb, var(--eco-accent) 48%, var(--eco-border));
+  --eco-scrollbar-thumb-hover: color-mix(in srgb, var(--eco-accent-strong) 62%, var(--eco-border));
+}
+
+body.app-light-theme {
+  @include mat.all-component-themes($light-theme);
+  --eco-bg: var(--eco-neutral-100);
+  --eco-surface: var(--eco-white);
+  --eco-surface-muted: var(--eco-neutral-200);
+  --eco-text: var(--eco-neutral-900);
+  --eco-text-muted: var(--eco-neutral-700);
+  --eco-border: var(--eco-neutral-300);
+  --eco-accent: var(--eco-success-600);
+  --eco-accent-strong: var(--eco-success-700);
+  --eco-ring: rgba(var(--eco-success-500-rgb), 0.2);
+  --eco-btn-text: #27272a;
+  --eco-btn-bg: var(--eco-accent);
+  --eco-btn-bg-strong: var(--eco-accent-strong);
+  --eco-shadow-lg:
+    0 8px 16px rgba(var(--eco-success-500-rgb), 0.24),
+    0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
+  --eco-scrollbar-track: var(--eco-bg);
+  --eco-scrollbar-thumb: color-mix(in srgb, var(--eco-neutral-300) 78%, var(--eco-success-600) 22%);
+  --eco-scrollbar-thumb-hover: color-mix(in srgb, var(--eco-neutral-300) 62%, var(--eco-success-600) 38%);
+}
+
+body.app-dark-theme {
+  @include mat.all-component-themes($dark-theme);
+  --eco-bg: #111217;
+  --eco-surface: #171922;
+  --eco-surface-muted: #1f2230;
+  --eco-text: #f4f4f5;
+  --eco-text-muted: #a1a1aa;
+  --eco-border: #2b2f3f;
+  --eco-accent: var(--eco-purple-400);
+  --eco-accent-strong: var(--eco-purple-500);
+  --eco-ring: rgba(var(--eco-purple-400-rgb), 0.22);
+  --eco-btn-text: #f4f4f5;
+  --eco-btn-bg: #6d28d9;
+  --eco-btn-bg-strong: #5b21b6;
+  --eco-shadow-lg:
+    0 8px 16px rgba(var(--eco-purple-500-rgb), 0.26),
+    0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
+  /* Flat, low-contrast scrollbar — no loud purple gradient */
+  --eco-scrollbar-track: var(--eco-bg);
+  --eco-scrollbar-thumb: #34303f;
+  --eco-scrollbar-thumb-hover: #4a4560;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Lexend', 'Lexend Fallback', sans-serif;
+  background: var(--eco-bg);
+  color: var(--eco-text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--eco-text);
+}
+
+p,
+li,
+label,
+small {
+  line-height: 1.45;
+}
+
+p {
+  margin: 0 0 0.7rem;
+  color: var(--eco-text-muted);
+}
+
+/* Page scrollbar only — nested controls keep browser defaults */
+html {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--eco-scrollbar-thumb) var(--eco-scrollbar-track);
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--eco-scrollbar-track);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  background-color: var(--eco-scrollbar-thumb);
+  min-height: 36px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--eco-scrollbar-thumb-hover);
+}
+
+html::-webkit-scrollbar-corner {
+  background: var(--eco-scrollbar-track);
+}
+
+button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
+  border-radius: var(--eco-radius) !important;
+  min-height: 38px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.86rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition:
+    transform 150ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease !important;
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button {
+  background: var(--eco-btn-bg) !important;
+  color: var(--eco-btn-text-inverse) !important;
+  border: 1px solid color-mix(in srgb, var(--eco-btn-bg-strong) 52%, transparent) !important;
+  box-shadow: var(--eco-shadow-sm) !important;
+}
+
+.mat-mdc-raised-button:hover,
+.mat-mdc-unelevated-button:hover {
+  background: var(--eco-btn-bg-strong) !important;
+  box-shadow: var(--eco-shadow-lg) !important;
+  transform: translateY(-1px);
+}
+
+.mat-mdc-outlined-button {
+  border-color: var(--eco-border) !important;
+  background: var(--eco-surface) !important;
+  color: var(--eco-btn-text) !important;
+  box-shadow: var(--eco-shadow-xs) !important;
+}
+
+.mat-mdc-outlined-button:hover {
+  border-color: var(--eco-accent) !important;
+  background: color-mix(in srgb, var(--eco-accent) 12%, var(--eco-surface)) !important;
+  box-shadow: var(--eco-shadow-md) !important;
+  transform: translateY(-1px);
+}
+
+.mat-mdc-outlined-button.mat-primary,
+.mat-mdc-outlined-button.mat-accent,
+.mat-mdc-outlined-button.mat-warn {
+  color: var(--eco-btn-text) !important;
+  border-color: var(--eco-border) !important;
+}
+
+.mat-mdc-outlined-button.mat-primary:hover,
+.mat-mdc-outlined-button.mat-accent:hover,
+.mat-mdc-outlined-button.mat-warn:hover {
+  border-color: var(--eco-accent) !important;
+  color: var(--eco-text) !important;
+}
+
+.mat-mdc-outlined-button.btn-template-delete {
+  color: color-mix(in srgb, var(--eco-text-muted) 50%, var(--eco-danger) 50%) !important;
+  border-color: var(--eco-border) !important;
+  background: var(--eco-surface) !important;
+}
+
+.mat-mdc-outlined-button.btn-template-delete:hover {
+  color: color-mix(in srgb, var(--eco-danger) 72%, var(--eco-text)) !important;
+  border-color: color-mix(in srgb, var(--eco-danger) 28%, var(--eco-border)) !important;
+  background: color-mix(in srgb, var(--eco-danger) 9%, var(--eco-surface)) !important;
+}
+
+.mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-raised-button .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-unelevated-button .mat-mdc-button-persistent-ripple::before {
+  background-color: transparent !important;
+}
+
+.mat-mdc-outlined-button:hover .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-raised-button:hover .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-unelevated-button:hover .mat-mdc-button-persistent-ripple::before {
+  background-color: color-mix(in srgb, var(--eco-accent) 18%, transparent) !important;
+  opacity: 1 !important;
+}
+
+.mat-mdc-raised-button:disabled,
+.mat-mdc-unelevated-button:disabled,
+.mat-mdc-outlined-button:disabled {
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.55;
+}
+
+select,
+.filter-select {
+  height: 2.35rem;
+  border: 1px solid var(--eco-border);
+  border-radius: var(--eco-radius);
+  background-color: var(--eco-surface);
+  color: var(--eco-text);
+  padding: 0 2rem 0 0.75rem;
+  font: inherit;
+  font-size: 0.86rem;
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--eco-text-muted) 50%),
+    linear-gradient(135deg, var(--eco-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) calc(50% + 1px),
+    calc(100% - 9px) calc(50% + 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+
+select:hover,
+.filter-select:hover {
+  border-color: color-mix(in srgb, var(--eco-accent) 62%, var(--eco-border));
+}
+
+select:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--eco-accent);
+  box-shadow: 0 0 0 3px var(--eco-ring);
+}
+
+.mat-mdc-form-field .mdc-text-field--outlined {
+  border-radius: var(--eco-radius);
+}
+
+.mat-mdc-form-field .mat-mdc-floating-label,
+.mat-mdc-form-field .mdc-floating-label {
+  color: var(--eco-text-muted) !important;
+  letter-spacing: 0;
+}
+
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__notch,
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: var(--eco-border) !important;
+  border-width: 1px !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--eco-accent) !important;
+  border-width: 1px !important;
+}
+
+/* One outline only — extra box-shadow looked like a second border */
+.mat-mdc-form-field.mat-focused .mdc-text-field--outlined {
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field .mdc-text-field--outlined .mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.mat-mdc-input-element {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease;
+}
+
+.mat-mdc-form-field.eco-field .mdc-text-field--outlined {
+  background-color: var(--eco-surface);
+}
+
+.mat-mdc-form-field.eco-field .mat-mdc-form-field-infix {
+  min-height: 2.5rem;
+}
+
+.mat-mdc-card-header {
+  padding: 1rem 1rem 0.35rem !important;
+}
+
+.mat-mdc-card-content {
+  padding: 0.25rem 1rem 1rem !important;
+}
+
+.mat-mdc-card-content > * + * {
+  margin-top: 0.9rem;
+}
+
+.mat-mdc-card {
+  border-radius: 12px !important;
+  border: 1px solid var(--eco-border);
+  box-shadow: var(--eco-card-shadow) !important;
+  transition:
+    box-shadow 200ms ease,
+    transform 150ms ease;
+}
+
+.mat-mdc-card:hover {
+  box-shadow: var(--eco-card-shadow-hover) !important;
+}
+
+/* mat-slide-toggle — never show nested scrollbars (WebKit/Firefox) */
+.mat-mdc-slide-toggle,
+.mat-mdc-slide-toggle * {
+  scrollbar-width: none;
+}
+
+.mat-mdc-slide-toggle *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* mat-slide-toggle — eco palette (track/handle/state layer) */
+.mat-mdc-slide-toggle {
+  overflow: visible !important;
+
+  .mdc-form-field,
+  .mdc-switch {
+    overflow: visible !important;
+  }
+
+  --mat-slide-toggle-label-text-color: var(--eco-text);
+
+  --mat-slide-toggle-selected-track-color: color-mix(in srgb, var(--eco-accent) 38%, var(--eco-border));
+  --mat-slide-toggle-selected-focus-track-color: color-mix(in srgb, var(--eco-accent) 48%, var(--eco-border));
+  --mat-slide-toggle-selected-hover-track-color: color-mix(in srgb, var(--eco-accent) 44%, var(--eco-border));
+  --mat-slide-toggle-selected-pressed-track-color: color-mix(in srgb, var(--eco-accent-strong) 55%, var(--eco-border));
+
+  --mat-slide-toggle-selected-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-focus-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-hover-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--eco-btn-text-inverse);
+  --mat-slide-toggle-selected-icon-color: var(--eco-accent-strong);
+
+  --mat-slide-toggle-selected-focus-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-selected-hover-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-selected-pressed-state-layer-color: var(--eco-accent-strong);
+
+  --mat-slide-toggle-unselected-track-color: color-mix(in srgb, var(--eco-surface-muted) 88%, var(--eco-border));
+  --mat-slide-toggle-unselected-focus-track-color: color-mix(in srgb, var(--eco-surface-muted) 82%, var(--eco-border));
+  --mat-slide-toggle-unselected-hover-track-color: color-mix(in srgb, var(--eco-accent) 12%, var(--eco-surface-muted));
+  --mat-slide-toggle-unselected-pressed-track-color: color-mix(in srgb, var(--eco-accent) 18%, var(--eco-surface-muted));
+
+  --mat-slide-toggle-unselected-handle-color: var(--eco-text-muted);
+  --mat-slide-toggle-unselected-focus-handle-color: var(--eco-text);
+  --mat-slide-toggle-unselected-hover-handle-color: var(--eco-text);
+  --mat-slide-toggle-unselected-pressed-handle-color: var(--eco-text-muted);
+  --mat-slide-toggle-unselected-icon-color: var(--eco-text-muted);
+
+  --mat-slide-toggle-unselected-focus-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-unselected-hover-state-layer-color: var(--eco-accent);
+  --mat-slide-toggle-unselected-pressed-state-layer-color: var(--eco-accent-strong);
+}
+
+/* Toolbar slide-toggle: no extra touch target scroll / overflow */
+.mat-mdc-slide-toggle.toolbar-slide {
+  --mat-slide-toggle-touch-target-display: none;
+  flex-shrink: 0;
+  align-self: center;
+  max-height: none !important;
+  overflow: visible !important;
+  line-height: 1.25;
+
+  .mat-mdc-slide-toggle-touch-target {
+    display: none !important;
+  }
+
+  .mat-internal-form-field,
+  .mdc-form-field {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .mdc-label {
+    overflow: visible !important;
+    white-space: normal;
+    max-height: none !important;
+  }
+}
+
+/* Chip listbox (template picker) — eco surfaces */
+.template-chips.mat-mdc-chip-listbox {
+  --mat-chip-elevated-container-color: color-mix(in srgb, var(--eco-surface) 82%, var(--eco-border));
+  --mat-chip-elevated-selected-container-color: color-mix(in srgb, var(--eco-accent) 22%, var(--eco-surface));
+  --mat-chip-label-text-color: var(--eco-text);
+  --mat-chip-with-icon-icon-color: var(--eco-accent-strong);
+  --mat-chip-selected-label-text-color: var(--eco-accent-strong);
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* vb-app-shell: keep content column readable (replaces old .page-shell max-width) */
+.vb-app-shell__main {
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+}
