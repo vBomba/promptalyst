@@ -1,28 +1,21 @@
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import type {
+  PromptSessionStoredDto,
+  PromptVersionStoredDto,
+} from '@promptalyst/contracts';
 
 import { PromptAnalysisResult } from './prompt.types';
+import { environment } from '../../environments/environment';
 
-const DB_NAME = 'promptalyst-db';
-const DB_VERSION = 1;
-const STORE = 'sessions';
-
-export interface PromptVersionStored {
-  id: string;
-  ordinal: number;
-  text: string;
+export interface PromptVersionStored
+  extends Omit<PromptVersionStoredDto, 'analysis'> {
   analysis?: PromptAnalysisResult;
-  suggestions?: string[];
-  improvedText?: string;
-  explainChanges?: string;
-  createdAt: number;
-  parentId?: string;
 }
 
-export interface PromptSessionStored {
-  id: string;
-  title: string;
-  createdAt: number;
-  updatedAt: number;
+export interface PromptSessionStored
+  extends Omit<PromptSessionStoredDto, 'versions'> {
   versions: PromptVersionStored[];
 }
 
@@ -30,67 +23,52 @@ export interface PromptSessionStored {
   providedIn: 'root',
 })
 export class HistoryStorageService {
-  private dbPromise: Promise<IDBDatabase> | null = null;
-
-  private db(): Promise<IDBDatabase> {
-    if (!this.dbPromise) {
-      this.dbPromise = new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, DB_VERSION);
-        req.onerror = () => reject(req.error);
-        req.onsuccess = () => resolve(req.result);
-        req.onupgradeneeded = () => {
-          const db = req.result;
-          if (!db.objectStoreNames.contains(STORE)) {
-            db.createObjectStore(STORE, { keyPath: 'id' });
-          }
-        };
-      });
-    }
-    return this.dbPromise;
-  }
+  private readonly http = inject(HttpClient);
+  private readonly base = `${environment.openAiApiBase}/history/sessions`;
+  private readonly requestOptions =
+    environment.historyApiKey && environment.historyApiKey.length > 0
+      ? {
+          headers: new HttpHeaders({
+            'X-Api-Key': environment.historyApiKey,
+          }),
+        }
+      : undefined;
 
   async listSessions(): Promise<PromptSessionStored[]> {
-    const db = await this.db();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readonly');
-      const store = tx.objectStore(STORE);
-      const req = store.getAll();
-      req.onerror = () => reject(req.error);
-      req.onsuccess = () => {
-        const rows = (req.result as PromptSessionStored[]) ?? [];
-        rows.sort((a, b) => b.updatedAt - a.updatedAt);
-        resolve(rows);
-      };
-    });
+    return firstValueFrom(
+      this.http.get<PromptSessionStored[]>(this.base, this.requestOptions),
+    );
   }
 
   async getSession(id: string): Promise<PromptSessionStored | undefined> {
-    const db = await this.db();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readonly');
-      const req = tx.objectStore(STORE).get(id);
-      req.onerror = () => reject(req.error);
-      req.onsuccess = () => resolve(req.result as PromptSessionStored | undefined);
-    });
+    try {
+      return await firstValueFrom(
+        this.http.get<PromptSessionStored>(
+          `${this.base}/${encodeURIComponent(id)}`,
+          this.requestOptions,
+        ),
+      );
+    } catch {
+      return undefined;
+    }
   }
 
   async putSession(session: PromptSessionStored): Promise<void> {
-    const db = await this.db();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).put(session);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
+    await firstValueFrom(
+      this.http.put<PromptSessionStored>(
+        `${this.base}/${encodeURIComponent(session.id)}`,
+        session,
+        this.requestOptions,
+      ),
+    );
   }
 
   async deleteSession(id: string): Promise<void> {
-    const db = await this.db();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).delete(id);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
+    await firstValueFrom(
+      this.http.delete<void>(
+        `${this.base}/${encodeURIComponent(id)}`,
+        this.requestOptions,
+      ),
+    );
   }
 }

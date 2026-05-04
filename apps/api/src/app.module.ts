@@ -8,6 +8,7 @@ import { LoggerModule } from 'nestjs-pino';
 
 import { AiModule } from './ai/ai.module';
 import { AppController } from './app.controller';
+import { HistoryModule } from './history/history.module';
 import { TelemetryModule } from './telemetry/telemetry.module';
 
 @Module({
@@ -29,6 +30,7 @@ import { TelemetryModule } from './telemetry/telemetry.module';
     }),
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 60 }]),
     AiModule,
+    HistoryModule,
     TelemetryModule,
   ],
   controllers: [AppController],

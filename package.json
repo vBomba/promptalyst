@@ -12,7 +12,10 @@
     "build:api": "nx build api",
     "build:web": "nx build web"
   },
-  "workspaces": ["apps/*", "libs/*"],
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
   "dependencies": {
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.0.0",
@@ -21,6 +24,7 @@
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "axios": "^1.7.9",
+    "better-sqlite3": "^12.9.0",
     "nestjs-pino": "^4.1.0",
     "pino-http": "^10.3.0",
     "reflect-metadata": "^0.2.2",
@@ -33,6 +37,7 @@
     "@nx/js": "22.7.1",
     "@nx/node": "22.7.1",
     "@nx/workspace": "22.7.1",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
     "@types/uuid": "^10.0.0",
