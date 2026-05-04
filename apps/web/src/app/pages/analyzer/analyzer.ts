@@ -51,6 +51,9 @@ export class Analyzer implements OnInit {
   protected readonly state = signal<PromptPipelineState | null>(null);
   protected readonly currentSessionId = signal<string | null>(null);
 
+  /** Start of the current “draft window” until the user runs Analyze (PRD draft duration). */
+  private readonly analysisDraftStartedAt = signal<number | null>(null);
+
   /** Precomputed chip labels — avoids calling store methods from the template. */
   protected readonly templateChipRows = computed(() => {
     const lang = this.locale.uiLang();
@@ -79,6 +82,11 @@ export class Analyzer implements OnInit {
     } else if (text) {
       this.promptText.set(text);
     }
+    this.markAnalysisDraftWindowStart();
+  }
+
+  private markAnalysisDraftWindowStart(): void {
+    this.analysisDraftStartedAt.set(Date.now());
   }
 
   protected onChipListChange(value: TemplateChipValue): void {
@@ -97,10 +105,13 @@ export class Analyzer implements OnInit {
     if (!text) {
       return;
     }
+    const started = this.analysisDraftStartedAt();
+    const draftDurationMs =
+      started != null ? Math.max(0, Math.round(Date.now() - started)) : undefined;
     this.error.set(null);
     this.busy.set(true);
     this.pipeline
-      .runAnalysis(text)
+      .runAnalysis(text, draftDurationMs !== undefined ? { draftDurationMs } : {})
       .pipe(
         switchMap((analysis) =>
           this.pipeline.runSuggestions(text, analysis).pipe(
@@ -112,6 +123,7 @@ export class Analyzer implements OnInit {
       .subscribe({
         next: ({ analysis, suggestions }) => {
           this.state.set({ analysis, suggestions });
+          this.markAnalysisDraftWindowStart();
         },
         error: (e) => this.error.set(String(e?.message ?? e)),
       });
@@ -155,6 +167,7 @@ export class Analyzer implements OnInit {
     this.state.set(null);
     this.error.set(null);
     this.currentSessionId.set(null);
+    this.markAnalysisDraftWindowStart();
   }
 
   protected async saveToHistory(): Promise<void> {

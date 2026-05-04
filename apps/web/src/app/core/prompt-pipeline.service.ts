@@ -12,12 +12,19 @@ export class PromptPipelineService {
   private readonly openAi = inject(OpenAiService);
   private readonly aiLocale = inject(AiLocaleService);
 
-  runAnalysis(promptText: string): Observable<PromptAnalysisResult> {
+  runAnalysis(
+    promptText: string,
+    opts?: { draftDurationMs?: number },
+  ): Observable<PromptAnalysisResult> {
     const lang = this.aiLocale.aiLang();
+    const meta =
+      opts?.draftDurationMs != null
+        ? `\n\n[Metadata for calibration: the user spent about ${opts.draftDurationMs} ms editing or preparing this prompt before requesting analysis. Very short durations may indicate a quick paste or template pick; long durations may indicate careful drafting.]`
+        : '';
     return this.openAi.chatJson<PromptAnalysisResult>(
       [
         { role: 'system', content: systemAnalysis(lang) },
-        { role: 'user', content: `Prompt to analyze:\n"""${promptText}"""` },
+        { role: 'user', content: `Prompt to analyze:\n"""${promptText}"""${meta}` },
       ],
       { temperature: 0.25 },
     );
@@ -53,8 +60,12 @@ export class PromptPipelineService {
     );
   }
 
-  runFullPipeline(promptText: string, advanced: boolean): Observable<PromptPipelineState> {
-    return this.runAnalysis(promptText).pipe(
+  runFullPipeline(
+    promptText: string,
+    advanced: boolean,
+    opts?: { draftDurationMs?: number },
+  ): Observable<PromptPipelineState> {
+    return this.runAnalysis(promptText, opts).pipe(
       switchMap((analysis) =>
         this.runSuggestions(promptText, analysis).pipe(
           switchMap((suggestions) =>
