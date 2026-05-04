@@ -7,7 +7,7 @@ import {
   VbTextareaComponent,
   VbToggleComponent,
 } from 'vbomba-ui';
-import { finalize, map, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 
 import { AiLocaleService } from '../../core/ai-locale.service';
 import { HistoryStorageService, PromptSessionStored, PromptVersionStored } from '../../core/history-storage.service';
@@ -134,15 +134,11 @@ export class Analyzer implements OnInit {
     this.error.set(null);
     this.busy.set(true);
     this.pipeline
-      .runAnalysis(text, draftDurationMs !== undefined ? { draftDurationMs } : {})
-      .pipe(
-        switchMap((analysis) =>
-          this.pipeline.runSuggestions(text, analysis).pipe(
-            map((suggestions) => ({ analysis, suggestions })),
-          ),
-        ),
-        finalize(() => this.busy.set(false)),
+      .runAnalysisAndSuggestions(
+        text,
+        draftDurationMs !== undefined ? { draftDurationMs } : {},
       )
+      .pipe(finalize(() => this.busy.set(false)))
       .subscribe({
         next: ({ analysis, suggestions }) => {
           this.state.set({ analysis, suggestions });

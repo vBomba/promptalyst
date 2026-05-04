@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
+import type { AnalyzeSuggestResponseDto } from '@promptalyst/contracts';
 
 import { AiLocaleService } from './ai-locale.service';
 import { OpenAiService } from './openai.service';
@@ -46,6 +47,17 @@ export class PromptPipelineService {
       .pipe(map((o) => o.suggestions ?? []));
   }
 
+  runAnalysisAndSuggestions(
+    promptText: string,
+    opts?: { draftDurationMs?: number },
+  ): Observable<AnalyzeSuggestResponseDto> {
+    return this.openAi.analyzeAndSuggest({
+      promptText,
+      aiLang: this.aiLocale.aiLang(),
+      draftDurationMs: opts?.draftDurationMs,
+    });
+  }
+
   runImprove(
     promptText: string,
     advanced: boolean,
@@ -65,19 +77,15 @@ export class PromptPipelineService {
     advanced: boolean,
     opts?: { draftDurationMs?: number },
   ): Observable<PromptPipelineState> {
-    return this.runAnalysis(promptText, opts).pipe(
-      switchMap((analysis) =>
-        this.runSuggestions(promptText, analysis).pipe(
-          switchMap((suggestions) =>
-            this.runImprove(promptText, advanced).pipe(
-              map(({ improved, explain }) => ({
-                analysis,
-                suggestions,
-                improvedText: improved,
-                explainChanges: advanced ? explain : undefined,
-              })),
-            ),
-          ),
+    return this.runAnalysisAndSuggestions(promptText, opts).pipe(
+      switchMap(({ analysis, suggestions }) =>
+        this.runImprove(promptText, advanced).pipe(
+          map(({ improved, explain }) => ({
+            analysis,
+            suggestions,
+            improvedText: improved,
+            explainChanges: advanced ? explain : undefined,
+          })),
         ),
       ),
     );

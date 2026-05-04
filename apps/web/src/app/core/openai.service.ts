@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import type {
+  AnalyzeSuggestRequestDto,
+  AnalyzeSuggestResponseDto,
+} from '@promptalyst/contracts';
 
 import { environment } from '../../environments/environment';
 
@@ -34,5 +38,10 @@ export class OpenAiService {
         return JSON.parse(raw) as T;
       }),
     );
+  }
+
+  analyzeAndSuggest(body: AnalyzeSuggestRequestDto): Observable<AnalyzeSuggestResponseDto> {
+    const url = `${environment.openAiApiBase}/ai/analyze-suggest`;
+    return this.http.post<AnalyzeSuggestResponseDto>(url, body);
   }
 }
