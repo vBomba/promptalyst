@@ -15,6 +15,7 @@ import { LocaleService } from '../../core/locale.service';
 import { PromptDraftService } from '../../core/prompt-draft.service';
 import { PromptPipelineService } from '../../core/prompt-pipeline.service';
 import { PromptPipelineState } from '../../core/prompt.types';
+import { TelemetryService } from '../../core/telemetry.service';
 import { TemplateStoreService } from '../../core/template-store.service';
 
 const TEMPLATE_CHIP_NONE = '__none__' as const;
@@ -40,6 +41,7 @@ export class Analyzer implements OnInit {
   private readonly draft = inject(PromptDraftService);
   protected readonly locale = inject(LocaleService);
   private readonly templateStore = inject(TemplateStoreService);
+  private readonly telemetry = inject(TelemetryService);
 
   protected readonly chipNone = TEMPLATE_CHIP_NONE;
   protected readonly chipSelection = signal<TemplateChipValue>(TEMPLATE_CHIP_NONE);
@@ -108,6 +110,7 @@ export class Analyzer implements OnInit {
     const started = this.analysisDraftStartedAt();
     const draftDurationMs =
       started != null ? Math.max(0, Math.round(Date.now() - started)) : undefined;
+    const pipelineStarted = performance.now();
     this.error.set(null);
     this.busy.set(true);
     this.pipeline
@@ -124,8 +127,20 @@ export class Analyzer implements OnInit {
         next: ({ analysis, suggestions }) => {
           this.state.set({ analysis, suggestions });
           this.markAnalysisDraftWindowStart();
+          this.telemetry.emit('pipeline_analyze_complete', {
+            durationMs: Math.round(performance.now() - pipelineStarted),
+            draftDurationMs: draftDurationMs ?? null,
+            advanced: this.advanced(),
+          });
         },
-        error: (e) => this.error.set(String(e?.message ?? e)),
+        error: (e) => {
+          this.error.set(String(e?.message ?? e));
+          this.telemetry.emit('pipeline_analyze_failed', {
+            durationMs: Math.round(performance.now() - pipelineStarted),
+            draftDurationMs: draftDurationMs ?? null,
+            advanced: this.advanced(),
+          });
+        },
       });
   }
 
@@ -134,6 +149,7 @@ export class Analyzer implements OnInit {
     if (!text) {
       return;
     }
+    const pipelineStarted = performance.now();
     this.error.set(null);
     this.busy.set(true);
     this.pipeline
@@ -149,8 +165,18 @@ export class Analyzer implements OnInit {
               explainChanges: this.advanced() ? explain : undefined,
             };
           });
+          this.telemetry.emit('pipeline_improve_complete', {
+            durationMs: Math.round(performance.now() - pipelineStarted),
+            advanced: this.advanced(),
+          });
         },
-        error: (e) => this.error.set(String(e?.message ?? e)),
+        error: (e) => {
+          this.error.set(String(e?.message ?? e));
+          this.telemetry.emit('pipeline_improve_failed', {
+            durationMs: Math.round(performance.now() - pipelineStarted),
+            advanced: this.advanced(),
+          });
+        },
       });
   }
 
