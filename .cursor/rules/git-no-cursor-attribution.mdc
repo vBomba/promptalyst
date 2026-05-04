@@ -8,3 +8,9 @@ alwaysApply: true
 - Не додавай до повідомлень комітів trailer на кшталт `Co-authored-by: Cursor <cursoragent@cursor.com>` і будь-які інші Cursor / made-with attribution.
 - Не використовуй `git commit --trailer` з цими даними.
 - Повідомлення коміту — лише зміст змін (subject + за потреби body), без реклами інструментів.
+
+## Чому trailer все одно з’являвся
+
+Cursor IDE може **автоматично дописувати** `Co-authored-by` / `Made-with` у тіло коміта (налаштування **Cursor → Agent → Attribution / Commit attribution**), навіть якщо агент викликає лише `git commit -m "..."` без `--trailer`. Це не частина команди в чаті — це шар редактора.
+
+У репозиторії є `.githooks/commit-msg`, який прибирає такі рядки. Один раз після `git clone`: `git config core.hooksPath .githooks`. У Cursor також вимкни **Agent → Commit attribution**, щоб зайві рядки взагалі не з’являлись.

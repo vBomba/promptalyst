@@ -1,0 +1,9 @@
+#!/bin/sh
+# Strips Cursor attribution lines if the IDE/agent injected them (we do not want them in history).
+set -e
+msg_file="$1"
+[ -n "$msg_file" ] || exit 0
+[ -f "$msg_file" ] || exit 0
+tmp="${msg_file}.strip.$$"
+grep -v '^Co-authored-by: Cursor' "$msg_file" | grep -v '^Made-with: Cursor' > "$tmp" || true
+mv -f "$tmp" "$msg_file"
