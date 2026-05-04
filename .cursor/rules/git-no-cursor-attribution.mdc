@@ -1,0 +1,10 @@
+---
+description: Git commits — без Co-authored-by / Cursor attribution
+alwaysApply: true
+---
+
+# Git commits
+
+- Не додавай до повідомлень комітів trailer на кшталт `Co-authored-by: Cursor <cursoragent@cursor.com>` і будь-які інші Cursor / made-with attribution.
+- Не використовуй `git commit --trailer` з цими даними.
+- Повідомлення коміту — лише зміст змін (subject + за потреби body), без реклами інструментів.
