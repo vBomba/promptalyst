@@ -3,8 +3,21 @@
 <p class="subhint">{{ t('templates.langHint') }}</p>
 
 <div class="toolbar">
-  <vb-button variant="filled" color="primary" type="button" [label]="t('templates.add')" (click)="addTemplate()" />
-  <vb-button variant="outlined" type="button" [label]="t('templates.reset')" (click)="resetAll()" />
+  <vb-button
+    variant="filled"
+    color="primary"
+    type="button"
+    iconClass="bx bx-plus"
+    [label]="t('templates.add')"
+    (click)="addTemplate()"
+  />
+  <vb-button
+    variant="text"
+    type="button"
+    iconClass="bx bx-refresh"
+    [label]="t('templates.reset')"
+    (click)="resetAll()"
+  />
 </div>
 
 <div class="grid">
@@ -33,9 +46,10 @@
         />
         <div class="card-actions">
           <vb-button
-            variant="filled"
+            variant="elevated"
             color="primary"
             type="button"
+            iconClass="bx bx-right-arrow-alt"
             [label]="t('templates.openAnalyzer')"
             (click)="openInAnalyzer(tmpl.id)"
           />
@@ -43,6 +57,7 @@
             variant="outlined"
             color="warn"
             type="button"
+            iconClass="bx bx-trash"
             [label]="t('templates.delete')"
             (click)="removeTemplate(tmpl.id)"
           />

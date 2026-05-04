@@ -1,8 +1,12 @@
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipListbox, MatChipOption } from '@angular/material/chips';
-import { VbButtonComponent, VbCheckboxComponent, VbLoaderComponent, VbTextareaComponent } from 'vbomba-ui';
+import {
+  VbButtonComponent,
+  VbChipComponent,
+  VbLoaderComponent,
+  VbTextareaComponent,
+  VbToggleComponent,
+} from 'vbomba-ui';
 import { finalize, map, switchMap } from 'rxjs';
 
 import { HistoryStorageService, PromptSessionStored, PromptVersionStored } from '../../core/history-storage.service';
@@ -19,12 +23,10 @@ type TemplateChipValue = string | typeof TEMPLATE_CHIP_NONE;
 @Component({
   selector: 'app-analyzer',
   imports: [
-    FormsModule,
     MatCardModule,
-    MatChipListbox,
-    MatChipOption,
     VbButtonComponent,
-    VbCheckboxComponent,
+    VbChipComponent,
+    VbToggleComponent,
     VbLoaderComponent,
     VbTextareaComponent,
   ],
@@ -75,6 +77,13 @@ export class Analyzer implements OnInit {
 
   protected onChipListChange(value: TemplateChipValue): void {
     this.chipSelection.set(value ?? TEMPLATE_CHIP_NONE);
+  }
+
+  protected onTemplateChipKeydown(event: KeyboardEvent, value: TemplateChipValue): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.onChipListChange(value);
+    }
   }
 
   protected analyze(): void {

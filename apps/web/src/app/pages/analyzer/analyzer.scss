@@ -41,6 +41,30 @@
 
 .template-chips {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.template-chip {
+  cursor: pointer;
+  border-radius: 999px;
+  transition:
+    transform 120ms ease,
+    box-shadow 150ms ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--eco-accent);
+    outline-offset: 2px;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &.selected {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--eco-accent) 45%, transparent);
+  }
 }
 
 .loading {

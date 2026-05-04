@@ -3,14 +3,21 @@
 
 <div class="toolbar">
   <div class="mode-toggle-host">
-    <vb-checkbox [(checked)]="advanced" [label]="advanced() ? t('analyzer.modeAdvanced') : t('analyzer.modeSimple')" />
+    <vb-toggle [(checked)]="advanced" [label]="advanced() ? t('analyzer.modeAdvanced') : t('analyzer.modeSimple')" />
   </div>
   <span class="spacer"></span>
-  <vb-button variant="outlined" type="button" [label]="t('analyzer.newPrompt')" (click)="newPrompt()" />
+  <vb-button
+    variant="text"
+    type="button"
+    iconClass="bx bx-reset"
+    [label]="t('analyzer.newPrompt')"
+    (click)="newPrompt()"
+  />
   <vb-button
     variant="filled"
     color="primary"
     type="button"
+    iconClass="bx bx-search-alt-2"
     [disabled]="busy() || !promptText().trim()"
     [label]="t('analyzer.analyze')"
     (click)="analyze()"
@@ -19,13 +26,15 @@
     variant="filled"
     color="primary"
     type="button"
+    iconClass="bx bx-brush-alt"
     [disabled]="busy() || !promptText().trim()"
     [label]="t('analyzer.improve')"
     (click)="improve()"
   />
   <vb-button
-    variant="outlined"
+    variant="elevated"
     type="button"
+    iconClass="bx bx-save"
     [disabled]="busy() || !state()?.analysis"
     [label]="t('analyzer.saveHistory')"
     (click)="saveToHistory()"
@@ -55,17 +64,30 @@
 
 <div class="template-chips-wrap">
   <span class="chips-label" id="tpl-chips-label">{{ t('analyzer.pickTemplate') }}</span>
-  <mat-chip-listbox
-    class="template-chips"
-    [ngModel]="chipSelection()"
-    (ngModelChange)="onChipListChange($event)"
-    aria-labelledby="tpl-chips-label"
-  >
-    <mat-chip-option [value]="chipNone">{{ t('analyzer.templateCustom') }}</mat-chip-option>
+  <div class="template-chips" role="radiogroup" aria-labelledby="tpl-chips-label">
+    <vb-chip
+      class="template-chip"
+      [class.selected]="chipSelection() === chipNone"
+      [label]="t('analyzer.templateCustom')"
+      role="radio"
+      [attr.aria-checked]="chipSelection() === chipNone"
+      [attr.tabindex]="chipSelection() === chipNone ? 0 : -1"
+      (click)="onChipListChange(chipNone)"
+      (keydown)="onTemplateChipKeydown($event, chipNone)"
+    />
     @for (tmpl of templateStore.list(); track tmpl.id) {
-      <mat-chip-option [value]="tmpl.id">{{ templateStore.getTitle(tmpl.id, locale.uiLang()) }}</mat-chip-option>
+      <vb-chip
+        class="template-chip"
+        [class.selected]="chipSelection() === tmpl.id"
+        [label]="templateStore.getTitle(tmpl.id, locale.uiLang())"
+        role="radio"
+        [attr.aria-checked]="chipSelection() === tmpl.id"
+        [attr.tabindex]="chipSelection() === tmpl.id ? 0 : -1"
+        (click)="onChipListChange(tmpl.id)"
+        (keydown)="onTemplateChipKeydown($event, tmpl.id)"
+      />
     }
-  </mat-chip-listbox>
+  </div>
 </div>
 
 @if (state(); as st) {
@@ -109,7 +131,13 @@
       </mat-card-header>
       <mat-card-content>
         <pre class="prompt-block">{{ st.improvedText }}</pre>
-        <vb-button variant="outlined" type="button" [label]="t('analyzer.applyImproved')" (click)="applyImproved()" />
+        <vb-button
+          variant="outlined"
+          type="button"
+          iconClass="bx bx-check-circle"
+          [label]="t('analyzer.applyImproved')"
+          (click)="applyImproved()"
+        />
       </mat-card-content>
     </mat-card>
   }

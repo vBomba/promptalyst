@@ -82,9 +82,6 @@ $dark-theme: mat.define-theme(
   --eco-card-shadow-hover:
     0 8px 14px rgba(var(--eco-shadow-soft-rgb), 0.12),
     0 4px 8px rgba(var(--eco-shadow-soft-rgb), 0.08);
-  --eco-scrollbar-track: var(--eco-bg);
-  --eco-scrollbar-thumb: color-mix(in srgb, var(--eco-accent) 48%, var(--eco-border));
-  --eco-scrollbar-thumb-hover: color-mix(in srgb, var(--eco-accent-strong) 62%, var(--eco-border));
 }
 
 body.app-light-theme {
@@ -104,9 +101,6 @@ body.app-light-theme {
   --eco-shadow-lg:
     0 8px 16px rgba(var(--eco-success-500-rgb), 0.24),
     0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
-  --eco-scrollbar-track: var(--eco-bg);
-  --eco-scrollbar-thumb: color-mix(in srgb, var(--eco-neutral-300) 78%, var(--eco-success-600) 22%);
-  --eco-scrollbar-thumb-hover: color-mix(in srgb, var(--eco-neutral-300) 62%, var(--eco-success-600) 38%);
 }
 
 body.app-dark-theme {
@@ -126,10 +120,6 @@ body.app-dark-theme {
   --eco-shadow-lg:
     0 8px 16px rgba(var(--eco-purple-500-rgb), 0.26),
     0 2px 4px rgba(var(--eco-shadow-rgb), 0.14);
-  /* Flat, low-contrast scrollbar — no loud purple gradient */
-  --eco-scrollbar-track: var(--eco-bg);
-  --eco-scrollbar-thumb: #34303f;
-  --eco-scrollbar-thumb-hover: #4a4560;
 }
 
 * {
@@ -176,39 +166,6 @@ small {
 p {
   margin: 0 0 0.7rem;
   color: var(--eco-text-muted);
-}
-
-/* Page scrollbar only — nested controls keep browser defaults */
-html {
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: var(--eco-scrollbar-thumb) var(--eco-scrollbar-track);
-}
-
-html::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-html::-webkit-scrollbar-track {
-  background: var(--eco-scrollbar-track);
-  border-radius: 999px;
-}
-
-html::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background-clip: padding-box;
-  background-color: var(--eco-scrollbar-thumb);
-  min-height: 36px;
-}
-
-html::-webkit-scrollbar-thumb:hover {
-  background-color: var(--eco-scrollbar-thumb-hover);
-}
-
-html::-webkit-scrollbar-corner {
-  background: var(--eco-scrollbar-track);
 }
 
 button,
@@ -259,17 +216,28 @@ button,
 }
 
 .mat-mdc-outlined-button.mat-primary,
-.mat-mdc-outlined-button.mat-accent,
-.mat-mdc-outlined-button.mat-warn {
+.mat-mdc-outlined-button.mat-accent {
   color: var(--eco-btn-text) !important;
   border-color: var(--eco-border) !important;
 }
 
 .mat-mdc-outlined-button.mat-primary:hover,
-.mat-mdc-outlined-button.mat-accent:hover,
-.mat-mdc-outlined-button.mat-warn:hover {
+.mat-mdc-outlined-button.mat-accent:hover {
   border-color: var(--eco-accent) !important;
   color: var(--eco-text) !important;
+}
+
+.mat-mdc-outlined-button.mat-warn {
+  color: color-mix(in srgb, var(--eco-danger) 78%, var(--eco-text)) !important;
+  border-color: color-mix(in srgb, var(--eco-danger) 30%, var(--eco-border)) !important;
+  background: var(--eco-surface) !important;
+}
+
+.mat-mdc-outlined-button.mat-warn:hover {
+  color: color-mix(in srgb, var(--eco-danger) 90%, var(--eco-text)) !important;
+  border-color: color-mix(in srgb, var(--eco-danger) 42%, var(--eco-border)) !important;
+  background: color-mix(in srgb, var(--eco-danger) 10%, var(--eco-surface)) !important;
+  box-shadow: var(--eco-shadow-xs) !important;
 }
 
 .mat-mdc-outlined-button.btn-template-delete {
@@ -282,6 +250,7 @@ button,
   color: color-mix(in srgb, var(--eco-danger) 72%, var(--eco-text)) !important;
   border-color: color-mix(in srgb, var(--eco-danger) 28%, var(--eco-border)) !important;
   background: color-mix(in srgb, var(--eco-danger) 9%, var(--eco-surface)) !important;
+  box-shadow: var(--eco-shadow-xs) !important;
 }
 
 .mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before,
@@ -295,6 +264,14 @@ button,
 .mat-mdc-unelevated-button:hover .mat-mdc-button-persistent-ripple::before {
   background-color: color-mix(in srgb, var(--eco-accent) 18%, transparent) !important;
   opacity: 1 !important;
+}
+
+/* Delete / warn — ripple and focus layer must stay danger-tinted, not theme accent */
+.mat-mdc-outlined-button.mat-warn:hover .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-outlined-button.mat-warn:focus .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-outlined-button.btn-template-delete:hover .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-outlined-button.btn-template-delete:focus .mat-mdc-button-persistent-ripple::before {
+  background-color: color-mix(in srgb, var(--eco-danger) 20%, transparent) !important;
 }
 
 .mat-mdc-raised-button:disabled,
@@ -420,17 +397,6 @@ select:focus,
 
 .mat-mdc-card:hover {
   box-shadow: var(--eco-card-shadow-hover) !important;
-}
-
-/* mat-slide-toggle — never show nested scrollbars (WebKit/Firefox) */
-.mat-mdc-slide-toggle,
-.mat-mdc-slide-toggle * {
-  scrollbar-width: none;
-}
-
-.mat-mdc-slide-toggle *::-webkit-scrollbar {
-  width: 0;
-  height: 0;
 }
 
 /* mat-slide-toggle — eco palette (track/handle/state layer) */

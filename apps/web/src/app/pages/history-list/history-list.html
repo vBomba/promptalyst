@@ -11,8 +11,15 @@
           <span class="date">{{ formatDate(s.updatedAt) }}</span>
         </div>
         <div class="actions">
-          <span class="vers">{{ t('history.versions') }}: {{ s.versions.length }}</span>
-          <vb-button variant="outlined" type="button" [label]="t('history.delete')" (click)="remove(s.id, $event)" />
+          <vb-chip class="vers-chip" [label]="t('history.versions') + ': ' + s.versions.length" />
+          <vb-button
+            variant="outlined"
+            color="warn"
+            type="button"
+            iconClass="bx bx-trash"
+            [label]="t('history.delete')"
+            (click)="remove(s.id, $event)"
+          />
           <vb-button
             variant="filled"
             color="primary"

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-import { VbButtonComponent } from 'vbomba-ui';
+import { VbButtonComponent, VbChipComponent } from 'vbomba-ui';
 
 import { HistoryStorageService, PromptSessionStored } from '../../core/history-storage.service';
 import { t } from '../../core/i18n';
@@ -9,7 +9,7 @@ import { LocaleService } from '../../core/locale.service';
 
 @Component({
   selector: 'app-history-list',
-  imports: [RouterLink, MatCardModule, VbButtonComponent],
+  imports: [RouterLink, MatCardModule, VbButtonComponent, VbChipComponent],
   templateUrl: './history-list.html',
   styleUrl: './history-list.scss',
 })
