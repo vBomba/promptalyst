@@ -17,6 +17,11 @@ const STRINGS: Record<string, Dict> = {
     uk: 'Мова',
     pl: 'Język',
   },
+  'settings.aiLanguage': {
+    en: 'AI responses',
+    uk: 'Мова відповіді AI',
+    pl: 'Język odpowiedzi AI',
+  },
   'analyzer.title': { en: 'Prompt', uk: 'Промпт', pl: 'Prompt' },
   'analyzer.placeholder': {
     en: 'Paste or write your prompt…',
@@ -61,9 +66,9 @@ const STRINGS: Record<string, Dict> = {
     pl: 'Zapisane w przeglądarce. Dodawaj, edytuj i usuwaj szablony; tytuł i treść zależą od języka w nagłówku.',
   },
   'templates.langHint': {
-    en: 'The header language applies to the UI, templates, and AI responses.',
-    uk: 'Мова в шапці задає інтерфейс, шаблони та відповіді моделі.',
-    pl: 'Język w nagłówku ustawia interfejs, szablony i odpowiedzi modelu.',
+    en: 'Header language sets the interface and template titles. Use “AI responses” in the header when you want model output in another language.',
+    uk: 'Мова в шапці задає інтерфейс і підписи шаблонів. Окремий селектор «Мова відповіді AI» задає мову аналізу та пояснень моделі.',
+    pl: 'Język nagłówka ustawia interfejs i etykiety szablonów. Osobny wybór „Język odpowiedzi AI” ustawia język analiz i wyjaśnień modelu.',
   },
   'templates.editTitle': { en: 'Title', uk: 'Назва', pl: 'Tytuł' },
   'templates.editBody': { en: 'Template text', uk: 'Текст шаблону', pl: 'Treść szablonu' },

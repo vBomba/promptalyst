@@ -1,9 +1,20 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 
 import { AppLang, LocaleService } from './locale.service';
 
+const STORAGE_AI = 'promptalyst-ai-lang';
+
+function readStoredAiLang(): AppLang | null {
+  const raw = localStorage.getItem(STORAGE_AI);
+  if (raw === 'uk' || raw === 'pl' || raw === 'en') {
+    return raw;
+  }
+  return null;
+}
+
 /**
- * Model output language — same as {@link LocaleService.uiLang} (single app language control).
+ * Language for model outputs (analyze, suggestions, improve, explain).
+ * May differ from {@link LocaleService.uiLang} UI language (PRD §9).
  */
 @Injectable({
   providedIn: 'root',
@@ -11,9 +22,13 @@ import { AppLang, LocaleService } from './locale.service';
 export class AiLocaleService {
   private readonly locale = inject(LocaleService);
 
-  readonly aiLang = this.locale.uiLang;
+  readonly aiLang = signal<AppLang>(readStoredAiLang() ?? this.locale.uiLang());
 
   setAiLang(lang: AppLang): void {
-    this.locale.setUiLang(lang);
+    if (this.aiLang() === lang) {
+      return;
+    }
+    this.aiLang.set(lang);
+    localStorage.setItem(STORAGE_AI, lang);
   }
 }

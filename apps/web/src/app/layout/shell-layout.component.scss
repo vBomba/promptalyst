@@ -1,7 +1,10 @@
 .shell-header-actions {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.35rem 0.5rem;
+  justify-content: flex-end;
+  max-width: min(100%, 22rem);
 }
 
 /* vb-select uses font:inherit — smaller type for toolbar language control */

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { VbAppShellComponent, VbSelectComponent, VbThemeService, type VbSelectOption } from 'vbomba-ui';
 
+import { AiLocaleService } from '../core/ai-locale.service';
 import type { AppLang } from '../core/locale.service';
 import { LocaleService } from '../core/locale.service';
 import { LocPipe } from '../core/loc.pipe';
@@ -14,6 +15,7 @@ import { LocPipe } from '../core/loc.pipe';
 export class ShellLayoutComponent {
   private readonly vbTheme = inject(VbThemeService);
   protected readonly locale = inject(LocaleService);
+  protected readonly aiLocale = inject(AiLocaleService);
 
   constructor() {
     this.vbTheme.init();
@@ -28,6 +30,12 @@ export class ShellLayoutComponent {
   protected onLangChange(value: string): void {
     if (value === 'en' || value === 'uk' || value === 'pl') {
       this.locale.setUiLang(value as AppLang);
+    }
+  }
+
+  protected onAiLangChange(value: string): void {
+    if (value === 'en' || value === 'uk' || value === 'pl') {
+      this.aiLocale.setAiLang(value as AppLang);
     }
   }
 }

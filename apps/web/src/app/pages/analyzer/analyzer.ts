@@ -9,6 +9,7 @@ import {
 } from 'vbomba-ui';
 import { finalize, map, switchMap } from 'rxjs';
 
+import { AiLocaleService } from '../../core/ai-locale.service';
 import { HistoryStorageService, PromptSessionStored, PromptVersionStored } from '../../core/history-storage.service';
 import { t } from '../../core/i18n';
 import { LocPipe } from '../../core/loc.pipe';
@@ -51,6 +52,7 @@ export class Analyzer implements OnInit {
   protected readonly locale = inject(LocaleService);
   private readonly templateStore = inject(TemplateStoreService);
   private readonly telemetry = inject(TelemetryService);
+  private readonly aiLocale = inject(AiLocaleService);
 
   protected readonly chipNone = TEMPLATE_CHIP_NONE;
   protected readonly chipSelection = signal<TemplateChipValue>(TEMPLATE_CHIP_NONE);
@@ -149,6 +151,7 @@ export class Analyzer implements OnInit {
             durationMs: Math.round(performance.now() - pipelineStarted),
             draftDurationMs: draftDurationMs ?? null,
             advanced: this.advanced(),
+            aiLang: this.aiLocale.aiLang(),
           });
         },
         error: (e) => {
@@ -157,6 +160,7 @@ export class Analyzer implements OnInit {
             durationMs: Math.round(performance.now() - pipelineStarted),
             draftDurationMs: draftDurationMs ?? null,
             advanced: this.advanced(),
+            aiLang: this.aiLocale.aiLang(),
           });
         },
       });
@@ -186,6 +190,7 @@ export class Analyzer implements OnInit {
           this.telemetry.emit('pipeline_improve_complete', {
             durationMs: Math.round(performance.now() - pipelineStarted),
             advanced: this.advanced(),
+            aiLang: this.aiLocale.aiLang(),
           });
         },
         error: (e) => {
@@ -193,6 +198,7 @@ export class Analyzer implements OnInit {
           this.telemetry.emit('pipeline_improve_failed', {
             durationMs: Math.round(performance.now() - pipelineStarted),
             advanced: this.advanced(),
+            aiLang: this.aiLocale.aiLang(),
           });
         },
       });

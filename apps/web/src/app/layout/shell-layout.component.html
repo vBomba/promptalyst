@@ -9,5 +9,14 @@
       (valueChange)="onLangChange($event)"
       [ariaLabel]="'settings.language' | loc : locale.uiLang()"
     />
+    <label class="sr-only" for="app-ai-lang">{{ 'settings.aiLanguage' | loc : locale.uiLang() }}</label>
+    <vb-select
+      id="app-ai-lang"
+      class="lang-select-shell"
+      [options]="langOptions"
+      [value]="aiLocale.aiLang()"
+      (valueChange)="onAiLangChange($event)"
+      [ariaLabel]="'settings.aiLanguage' | loc : locale.uiLang()"
+    />
   </div>
 </vb-app-shell>
