@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { VbButtonComponent, VbInputComponent, VbTextareaComponent } from 'vbomba-ui';
 
 import { t } from '../../core/i18n';
+import { LocPipe } from '../../core/loc.pipe';
 import { LocaleService } from '../../core/locale.service';
 import { PromptDraftService } from '../../core/prompt-draft.service';
 import { TemplateStoreService } from '../../core/template-store.service';
@@ -11,14 +12,14 @@ import { TemplateId } from '../../core/templates.data';
 
 @Component({
   selector: 'app-templates',
-  imports: [MatCardModule, VbButtonComponent, VbInputComponent, VbTextareaComponent],
+  imports: [MatCardModule, VbButtonComponent, VbInputComponent, VbTextareaComponent, LocPipe],
   templateUrl: './templates.html',
   styleUrl: './templates.scss',
 })
 export class Templates {
   private readonly router = inject(Router);
   private readonly draft = inject(PromptDraftService);
-  private readonly locale = inject(LocaleService);
+  protected readonly locale = inject(LocaleService);
   protected readonly store = inject(TemplateStoreService);
 
   protected readonly titleDraft = signal<Record<string, string>>({});
@@ -32,16 +33,12 @@ export class Templates {
     });
   }
 
-  protected t(key: string): string {
-    return t(key, this.locale.uiLang());
-  }
-
   protected addTemplate(): void {
     this.store.addTemplate();
   }
 
   protected removeTemplate(id: TemplateId): void {
-    if (!confirm(this.t('templates.deleteConfirm'))) {
+    if (!confirm(t('templates.deleteConfirm', this.locale.uiLang()))) {
       return;
     }
     this.store.removeTemplate(id);
@@ -58,7 +55,7 @@ export class Templates {
   }
 
   protected resetAll(): void {
-    if (!confirm(this.t('templates.resetConfirm'))) {
+    if (!confirm(t('templates.resetConfirm', this.locale.uiLang()))) {
       return;
     }
     this.store.resetToDefaults();

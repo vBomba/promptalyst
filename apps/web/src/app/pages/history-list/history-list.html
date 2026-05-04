@@ -1,7 +1,7 @@
-<h1>{{ t('history.title') }}</h1>
+<h1>{{ 'history.title' | loc : locale.uiLang() }}</h1>
 
 @if (sessions().length === 0) {
-  <p>{{ t('history.empty') }}</p>
+  <p>{{ 'history.empty' | loc : locale.uiLang() }}</p>
 } @else {
   @for (s of sessions(); track s.id) {
     <mat-card class="row">
@@ -11,20 +11,23 @@
           <span class="date">{{ formatDate(s.updatedAt) }}</span>
         </div>
         <div class="actions">
-          <vb-chip class="vers-chip" [label]="t('history.versions') + ': ' + s.versions.length" />
+          <vb-chip
+            class="vers-chip"
+            [label]="('history.versions' | loc : locale.uiLang()) + ': ' + s.versions.length"
+          />
           <vb-button
             variant="outlined"
             color="warn"
             type="button"
             iconClass="bx bx-trash"
-            [label]="t('history.delete')"
+            [label]="'history.delete' | loc : locale.uiLang()"
             (click)="remove(s.id, $event)"
           />
           <vb-button
             variant="filled"
             color="primary"
             type="button"
-            [label]="t('history.open')"
+            [label]="'history.open' | loc : locale.uiLang()"
             (click)="openSession(s.id)"
           />
         </div>

@@ -1,6 +1,6 @@
-<h1>{{ t('templates.title') }}</h1>
-<p>{{ t('templates.hint') }}</p>
-<p class="subhint">{{ t('templates.langHint') }}</p>
+<h1>{{ 'templates.title' | loc : locale.uiLang() }}</h1>
+<p>{{ 'templates.hint' | loc : locale.uiLang() }}</p>
+<p class="subhint">{{ 'templates.langHint' | loc : locale.uiLang() }}</p>
 
 <div class="toolbar">
   <vb-button
@@ -8,14 +8,14 @@
     color="primary"
     type="button"
     iconClass="bx bx-plus"
-    [label]="t('templates.add')"
+    [label]="'templates.add' | loc : locale.uiLang()"
     (click)="addTemplate()"
   />
   <vb-button
     variant="text"
     type="button"
     iconClass="bx bx-refresh"
-    [label]="t('templates.reset')"
+    [label]="'templates.reset' | loc : locale.uiLang()"
     (click)="resetAll()"
   />
 </div>
@@ -24,25 +24,25 @@
   @for (tmpl of store.list(); track tmpl.id) {
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ t('templates.cardTitle') }} · {{ tmpl.id }}</mat-card-title>
+        <mat-card-title>{{ 'templates.cardTitle' | loc : locale.uiLang() }} · {{ tmpl.id }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <vb-input
           class="full-vb"
-          [placeholder]="t('templates.editTitle')"
+          [placeholder]="'templates.editTitle' | loc : locale.uiLang()"
           [value]="titleDraft()[tmpl.id]"
           (valueChange)="onTitleChange(tmpl.id, $event)"
-          [ariaLabel]="t('templates.editTitle')"
+          [ariaLabel]="'templates.editTitle' | loc : locale.uiLang()"
         />
         <vb-textarea
           class="full-vb"
           [rows]="10"
           [counter]="true"
           [maxLength]="32000"
-          [placeholder]="t('templates.editBody')"
+          [placeholder]="'templates.editBody' | loc : locale.uiLang()"
           [value]="bodyDraft()[tmpl.id]"
           (valueChange)="onBodyChange(tmpl.id, $event)"
-          [ariaLabel]="t('templates.editBody')"
+          [ariaLabel]="'templates.editBody' | loc : locale.uiLang()"
         />
         <div class="card-actions">
           <vb-button
@@ -50,7 +50,7 @@
             color="primary"
             type="button"
             iconClass="bx bx-right-arrow-alt"
-            [label]="t('templates.openAnalyzer')"
+            [label]="'templates.openAnalyzer' | loc : locale.uiLang()"
             (click)="openInAnalyzer(tmpl.id)"
           />
           <vb-button
@@ -58,7 +58,7 @@
             color="warn"
             type="button"
             iconClass="bx bx-trash"
-            [label]="t('templates.delete')"
+            [label]="'templates.delete' | loc : locale.uiLang()"
             (click)="removeTemplate(tmpl.id)"
           />
         </div>

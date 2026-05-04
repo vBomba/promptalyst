@@ -1,9 +1,9 @@
-<a routerLink="/history">← {{ t('nav.history') }}</a>
+<a routerLink="/history">← {{ 'nav.history' | loc : locale.uiLang() }}</a>
 
 @if (session(); as s) {
   <h1>{{ s.title }}</h1>
 
-  <h2>{{ t('history.versions') }}</h2>
+  <h2>{{ 'history.versions' | loc : locale.uiLang() }}</h2>
   <ul class="version-list">
     @for (v of s.versions; track v.id) {
       <li>
@@ -14,7 +14,7 @@
   </ul>
 
   @if (s.versions.length > 1) {
-    <h2>{{ t('history.compare') }}</h2>
+    <h2>{{ 'history.compare' | loc : locale.uiLang() }}</h2>
     <div class="compare-picks">
       <div class="compare-field">
         <span class="compare-label">A</span>
@@ -52,5 +52,5 @@
     }
   }
 } @else {
-  <p>{{ t('history.empty') }}</p>
+  <p>{{ 'history.empty' | loc : locale.uiLang() }}</p>
 }

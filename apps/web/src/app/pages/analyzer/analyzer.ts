@@ -10,7 +10,7 @@ import {
 import { finalize, map, switchMap } from 'rxjs';
 
 import { HistoryStorageService, PromptSessionStored, PromptVersionStored } from '../../core/history-storage.service';
-import { t } from '../../core/i18n';
+import { LocPipe } from '../../core/loc.pipe';
 import { LocaleService } from '../../core/locale.service';
 import { PromptDraftService } from '../../core/prompt-draft.service';
 import { PromptPipelineService } from '../../core/prompt-pipeline.service';
@@ -29,6 +29,7 @@ type TemplateChipValue = string | typeof TEMPLATE_CHIP_NONE;
     VbToggleComponent,
     VbLoaderComponent,
     VbTextareaComponent,
+    LocPipe,
   ],
   templateUrl: './analyzer.html',
   styleUrl: './analyzer.scss',
@@ -69,10 +70,6 @@ export class Analyzer implements OnInit {
     } else if (text) {
       this.promptText.set(text);
     }
-  }
-
-  protected t(key: string): string {
-    return t(key, this.locale.uiLang());
   }
 
   protected onChipListChange(value: TemplateChipValue): void {

@@ -3,11 +3,11 @@ import { VbAppShellComponent, VbSelectComponent, VbThemeService, type VbSelectOp
 
 import type { AppLang } from '../core/locale.service';
 import { LocaleService } from '../core/locale.service';
-import { t } from '../core/i18n';
+import { LocPipe } from '../core/loc.pipe';
 
 @Component({
   selector: 'app-shell-layout',
-  imports: [VbAppShellComponent, VbSelectComponent],
+  imports: [VbAppShellComponent, VbSelectComponent, LocPipe],
   templateUrl: './shell-layout.component.html',
   styleUrl: './shell-layout.component.scss',
 })
@@ -24,10 +24,6 @@ export class ShellLayoutComponent {
     { value: 'uk', label: 'Українська' },
     { value: 'pl', label: 'Polski' },
   ];
-
-  protected t(key: string): string {
-    return t(key, this.locale.uiLang());
-  }
 
   protected onLangChange(value: string): void {
     if (value === 'en' || value === 'uk' || value === 'pl') {

@@ -1,16 +1,19 @@
-<h1>{{ t('analyzer.title') }}</h1>
-<p>{{ t('analyzer.placeholder') }}</p>
+<h1>{{ 'analyzer.title' | loc : locale.uiLang() }}</h1>
+<p>{{ 'analyzer.placeholder' | loc : locale.uiLang() }}</p>
 
 <div class="toolbar">
   <div class="mode-toggle-host">
-    <vb-toggle [(checked)]="advanced" [label]="advanced() ? t('analyzer.modeAdvanced') : t('analyzer.modeSimple')" />
+    <vb-toggle
+      [(checked)]="advanced"
+      [label]="(advanced() ? 'analyzer.modeAdvanced' : 'analyzer.modeSimple') | loc : locale.uiLang()"
+    />
   </div>
   <span class="spacer"></span>
   <vb-button
     variant="text"
     type="button"
     iconClass="bx bx-reset"
-    [label]="t('analyzer.newPrompt')"
+    [label]="'analyzer.newPrompt' | loc : locale.uiLang()"
     (click)="newPrompt()"
   />
   <vb-button
@@ -19,7 +22,7 @@
     type="button"
     iconClass="bx bx-search-alt-2"
     [disabled]="busy() || !promptText().trim()"
-    [label]="t('analyzer.analyze')"
+    [label]="'analyzer.analyze' | loc : locale.uiLang()"
     (click)="analyze()"
   />
   <vb-button
@@ -28,7 +31,7 @@
     type="button"
     iconClass="bx bx-brush-alt"
     [disabled]="busy() || !promptText().trim()"
-    [label]="t('analyzer.improve')"
+    [label]="'analyzer.improve' | loc : locale.uiLang()"
     (click)="improve()"
   />
   <vb-button
@@ -36,39 +39,39 @@
     type="button"
     iconClass="bx bx-save"
     [disabled]="busy() || !state()?.analysis"
-    [label]="t('analyzer.saveHistory')"
+    [label]="'analyzer.saveHistory' | loc : locale.uiLang()"
     (click)="saveToHistory()"
   />
 </div>
 
 @if (busy()) {
   <div class="loading">
-    <vb-loader [size]="36" [ariaLabel]="t('analyzer.working')" />
-    <span>{{ t('analyzer.working') }}</span>
+    <vb-loader [size]="36" [ariaLabel]="'analyzer.working' | loc : locale.uiLang()" />
+    <span>{{ 'analyzer.working' | loc : locale.uiLang() }}</span>
   </div>
 }
 
 @if (error()) {
-  <p class="error">{{ t('analyzer.error') }}: {{ error() }}</p>
+  <p class="error">{{ 'analyzer.error' | loc : locale.uiLang() }}: {{ error() }}</p>
 }
 
 <vb-textarea
   class="prompt-field-vb"
   [rows]="12"
-  [placeholder]="t('analyzer.title')"
+  [placeholder]="'analyzer.title' | loc : locale.uiLang()"
   [counter]="true"
   [maxLength]="32000"
   [(value)]="promptText"
-  [ariaLabel]="t('analyzer.title')"
+  [ariaLabel]="'analyzer.title' | loc : locale.uiLang()"
 />
 
 <div class="template-chips-wrap">
-  <span class="chips-label" id="tpl-chips-label">{{ t('analyzer.pickTemplate') }}</span>
+  <span class="chips-label" id="tpl-chips-label">{{ 'analyzer.pickTemplate' | loc : locale.uiLang() }}</span>
   <div class="template-chips" role="radiogroup" aria-labelledby="tpl-chips-label">
     <vb-chip
       class="template-chip"
       [class.selected]="chipSelection() === chipNone"
-      [label]="t('analyzer.templateCustom')"
+      [label]="'analyzer.templateCustom' | loc : locale.uiLang()"
       role="radio"
       [attr.aria-checked]="chipSelection() === chipNone"
       [attr.tabindex]="chipSelection() === chipNone ? 0 : -1"
@@ -94,7 +97,7 @@
   @if (st.analysis; as a) {
     <mat-card class="panel">
       <mat-card-header>
-        <mat-card-title>{{ t('analyzer.score') }}: {{ a.overallScore }} / 10</mat-card-title>
+        <mat-card-title>{{ 'analyzer.score' | loc : locale.uiLang() }}: {{ a.overallScore }} / 10</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <ul class="criteria">
@@ -112,7 +115,7 @@
   @if (st.suggestions?.length) {
     <mat-card class="panel">
       <mat-card-header>
-        <mat-card-title>{{ t('analyzer.suggestions') }}</mat-card-title>
+        <mat-card-title>{{ 'analyzer.suggestions' | loc : locale.uiLang() }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <ul>
@@ -127,7 +130,7 @@
   @if (st.improvedText) {
     <mat-card class="panel">
       <mat-card-header>
-        <mat-card-title>{{ t('analyzer.improved') }}</mat-card-title>
+        <mat-card-title>{{ 'analyzer.improved' | loc : locale.uiLang() }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <pre class="prompt-block">{{ st.improvedText }}</pre>
@@ -135,7 +138,7 @@
           variant="outlined"
           type="button"
           iconClass="bx bx-check-circle"
-          [label]="t('analyzer.applyImproved')"
+          [label]="'analyzer.applyImproved' | loc : locale.uiLang()"
           (click)="applyImproved()"
         />
       </mat-card-content>
@@ -145,7 +148,7 @@
   @if (st.explainChanges) {
     <mat-card class="panel">
       <mat-card-header>
-        <mat-card-title>{{ t('analyzer.explain') }}</mat-card-title>
+        <mat-card-title>{{ 'analyzer.explain' | loc : locale.uiLang() }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <p class="explain">{{ st.explainChanges }}</p>

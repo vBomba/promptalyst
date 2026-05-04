@@ -7,19 +7,19 @@ import { map } from 'rxjs';
 import { type VbSelectOption, VbSelectComponent } from 'vbomba-ui';
 
 import { HistoryStorageService, PromptSessionStored, PromptVersionStored } from '../../core/history-storage.service';
-import { t } from '../../core/i18n';
+import { LocPipe } from '../../core/loc.pipe';
 import { LocaleService } from '../../core/locale.service';
 
 @Component({
   selector: 'app-history-detail',
-  imports: [RouterLink, MatCardModule, SlicePipe, VbSelectComponent],
+  imports: [RouterLink, MatCardModule, SlicePipe, VbSelectComponent, LocPipe],
   templateUrl: './history-detail.html',
   styleUrl: './history-detail.scss',
 })
 export class HistoryDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly history = inject(HistoryStorageService);
-  private readonly locale = inject(LocaleService);
+  protected readonly locale = inject(LocaleService);
 
   private readonly id = toSignal(this.route.paramMap.pipe(map((p) => p.get('id'))), {
     initialValue: null,
@@ -68,10 +68,6 @@ export class HistoryDetail implements OnInit {
       this.compareA.set(0);
       this.compareB.set(sess.versions.length - 1);
     }
-  }
-
-  protected t(key: string): string {
-    return t(key, this.locale.uiLang());
   }
 
 }
